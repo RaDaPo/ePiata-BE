@@ -1,5 +1,6 @@
 package ro.hacktm.oradea.epiata.controller;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -10,14 +11,14 @@ import ro.hacktm.oradea.epiata.service.TenderService;
 import java.util.List;
 
 @RestController
-@RequestMapping(path = "/tender")
+@SuppressWarnings("unused")
+@RequestMapping(path = "/api/tenders")
+@RequiredArgsConstructor(onConstructor = @__(@Autowired))
 public class TenderController {
 
+    private final TenderService tenderService;
 
-    @Autowired
-    private TenderService tenderService;
-
-    @GetMapping(path = "/all")
+    @GetMapping
     List<TenderDto> getAllUsers() {
         return tenderService.getAllTenders();
     }
@@ -28,6 +29,5 @@ public class TenderController {
         BeanUtils.copyProperties(tenderDto, tender);
         tenderService.save(tender);
         return tender;
-
     }
 }
