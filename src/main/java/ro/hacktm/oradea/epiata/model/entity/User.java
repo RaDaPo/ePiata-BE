@@ -21,14 +21,14 @@ public class User {
 
     private String name;
     private String email;
-    @ManyToMany(cascade = { CascadeType.ALL })
+    @ManyToMany(cascade = {CascadeType.ALL})
     @JoinTable(
             name = "User_Tender",
-            joinColumns = { @JoinColumn(name = "user_id") },
-            inverseJoinColumns = { @JoinColumn(name = "tender_id") }
+            joinColumns = {@JoinColumn(name = "user_id")},
+            inverseJoinColumns = {@JoinColumn(name = "tender_id")}
     )
     private List<Tender> tenders;
-    @OneToMany(mappedBy="user")
+    @OneToMany(mappedBy = "user")
     @JsonBackReference
     private List<Offer> offers;
 

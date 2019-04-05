@@ -13,7 +13,6 @@ import java.util.List;
 @RequestMapping(path = "/tender")
 public class TenderController {
 
-
     @Autowired
     private TenderService tenderService;
 

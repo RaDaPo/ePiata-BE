@@ -3,7 +3,9 @@ package ro.hacktm.oradea.epiata.model.entity;
 import lombok.Data;
 import ro.hacktm.oradea.epiata.model.dto.CategoryDto;
 
-import javax.persistence.*;
+import javax.persistence.Embeddable;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 
 @Embeddable
 @Data
