@@ -1,5 +1,7 @@
 package ro.hacktm.oradea.epiata.model.entity;
 
+import ro.hacktm.oradea.epiata.model.dto.CategoryDto;
+
 import javax.persistence.*;
 
 @Entity
@@ -15,4 +17,11 @@ public class Category {
 
     @Enumerated(EnumType.STRING)
     private Vegetables vegetables;
+
+    public CategoryDto toDto() {
+        CategoryDto dto = new CategoryDto();
+        dto.setFruits(this.fruits);
+        dto.setVegetables(this.vegetables);
+        return dto;
+    }
 }
