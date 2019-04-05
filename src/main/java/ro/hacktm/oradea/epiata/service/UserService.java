@@ -23,7 +23,7 @@ public class UserService {
         if (!entity.isEmpty()) {
             return entity.stream().map(User::toDto).collect(Collectors.toList());
         } else {
-            throw new UserException("Users not found Exception");
+            throw new UserException("Users not found exception");
         }
     }
 
@@ -45,9 +45,14 @@ public class UserService {
     }
 
     public void updateUser(UserDto dto) {
-        User user = new User();
-        BeanUtils.copyProperties(dto, user);
-        repository.save(user);
+        Optional<User> userEntity = repository.findById(dto.getId());
+        if (userEntity.isPresent()) {
+            User user = new User();
+            BeanUtils.copyProperties(dto, user);
+            repository.save(user);
+        } else {
+            throw new UserException("User cannot be updated exception");
+        }
     }
 
     public void deleteUser(Long id) {
@@ -55,7 +60,7 @@ public class UserService {
         if (userEntity.isPresent()) {
             repository.delete(userEntity.get());
         } else {
-            throw new UserException("User not found exception");
+            throw new UserException("User cannot be deleted exception");
         }
     }
 }

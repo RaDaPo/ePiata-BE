@@ -14,6 +14,7 @@ public class UserDto {
     private String email;
     private List<TenderDto> tenders;
     private List<OfferDto> offers;
+    private Long id;
 
     @Embedded
     private Location location;
