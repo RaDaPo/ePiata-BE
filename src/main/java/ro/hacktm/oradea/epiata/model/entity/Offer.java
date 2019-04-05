@@ -1,7 +1,6 @@
 package ro.hacktm.oradea.epiata.model.entity;
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
 import ro.hacktm.oradea.epiata.model.dto.OfferDto;
 
 import javax.persistence.*;
@@ -9,8 +8,7 @@ import java.util.Date;
 
 @Entity
 @Table(name = "OFFER")
-@Getter
-@Setter
+@Data
 public class Offer {
 
     @Id
