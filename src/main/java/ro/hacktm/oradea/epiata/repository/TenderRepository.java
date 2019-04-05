@@ -8,6 +8,5 @@ import java.util.List;
 
 @Repository
 public interface TenderRepository extends PagingAndSortingRepository<Tender, Long> {
-    List<Tender> findAll();
-
+	List<Tender> findAll();
 }
