@@ -2,10 +2,8 @@ package ro.hacktm.oradea.epiata.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.*;
 import ro.hacktm.oradea.epiata.model.dto.UserDto;
 import ro.hacktm.oradea.epiata.service.UserService;
 
@@ -24,8 +22,25 @@ public class UserController {
         return userService.getAllUsers();
     }
 
+    @GetMapping(path = "/{id}")
+    UserDto getUser(@PathVariable Long userId) {
+        return userService.getUser(userId);
+    }
+
     @PostMapping(path = "create")
+    @ResponseStatus(value = HttpStatus.NO_CONTENT)
     void createUser(UserDto userDto) {
         userService.createUser(userDto);
+    }
+
+    @PutMapping(path = "/update")
+    @ResponseStatus(value = HttpStatus.NO_CONTENT)
+    void updateUser(@RequestBody UserDto dto) {
+        userService.updateUser(dto);
+    }
+
+    @DeleteMapping(path = "/delete/{id}")
+    void deleteUser(@PathVariable Long id){
+        userService.deleteUser(id);
     }
 }
