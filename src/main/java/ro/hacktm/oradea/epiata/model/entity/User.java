@@ -21,8 +21,12 @@ public class User {
     private String name;
     private String address;
     private String email;
-    @OneToMany(mappedBy="user")
-    @JsonBackReference
+    @ManyToMany(cascade = { CascadeType.ALL })
+    @JoinTable(
+            name = "User_Tender",
+            joinColumns = { @JoinColumn(name = "user_id") },
+            inverseJoinColumns = { @JoinColumn(name = "tender_id") }
+    )
     private List<Tender> tenders;
     @OneToMany(mappedBy="user")
     @JsonBackReference

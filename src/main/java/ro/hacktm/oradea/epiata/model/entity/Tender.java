@@ -5,6 +5,7 @@ import lombok.Setter;
 import ro.hacktm.oradea.epiata.model.dto.TenderDto;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 @Table(name = "TENDER")
@@ -23,9 +24,8 @@ public class Tender {
     private String distance;
     private String owner;
     private boolean status;
-    @ManyToOne()
-    @JoinColumn(name = "user_id")
-    private User user;
+    @ManyToMany(mappedBy = "tenders")
+    private List<User> user;
 
     public TenderDto toDto() {
         TenderDto dto = new TenderDto();

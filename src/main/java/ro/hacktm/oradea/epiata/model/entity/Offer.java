@@ -18,6 +18,7 @@ public class Offer {
     private Long id;
     private String name;
     private String owner;
+    @Embedded
     private Category category;
     @Column(name = "start_date")
     private Date startDate;
