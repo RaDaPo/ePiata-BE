@@ -5,12 +5,9 @@ import ro.hacktm.oradea.epiata.model.dto.CategoryDto;
 
 import javax.persistence.*;
 
+@Embeddable
 @Data
 public class Category {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
 
     @Enumerated(EnumType.STRING)
     private Fruits fruits;
