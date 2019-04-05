@@ -1,15 +1,13 @@
 package ro.hacktm.oradea.epiata.model.entity;
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
 import ro.hacktm.oradea.epiata.model.dto.TenderDto;
 
 import javax.persistence.*;
 
 @Entity
 @Table(name = "TENDER")
-@Getter
-@Setter
+@Data
 public class Tender {
 
     @Id

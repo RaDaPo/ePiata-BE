@@ -1,11 +1,13 @@
 package ro.hacktm.oradea.epiata.model.entity;
 
+import lombok.Data;
 import ro.hacktm.oradea.epiata.model.dto.CategoryDto;
 
 import javax.persistence.*;
 
 @Entity
 @Table(name = "CATEGORY")
+@Data
 public class Category {
 
     @Id
