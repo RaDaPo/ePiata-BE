@@ -6,9 +6,9 @@ import javax.persistence.Embeddable;
 
 @Embeddable
 @Data
-class Location {
+public class Location {
 
-	String address;
-	int no;
+    String address;
+    int no;
 
 }

@@ -1,5 +1,6 @@
 package ro.hacktm.oradea.epiata.service;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ro.hacktm.oradea.epiata.model.dto.TenderDto;
@@ -11,10 +12,10 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
+@RequiredArgsConstructor(onConstructor = @__(@Autowired))
 public class TenderService {
 
-    @Autowired
-    private TenderRepository repository;
+    private final TenderRepository repository;
 
     public List<TenderDto> getAllTenders() {
         List<Tender> entity = repository.findAll();
