@@ -9,13 +9,13 @@ import java.util.List;
 @Data
 public class UserDto {
 
-    private String name;
-    private String address;
-    private String email;
-    private List<TenderDto> tenders;
-    private List<OfferDto> offers;
-    private Long id;
+	private String name;
+	private String address;
+	private String email;
+	private List<TenderDto> tenders;
+	private List<OfferDto> offers;
+	private Long id;
 
-    @Embedded
-    private Location location;
+	@Embedded
+	private Location location;
 }

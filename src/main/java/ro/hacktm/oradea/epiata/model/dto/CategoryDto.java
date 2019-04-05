@@ -6,7 +6,6 @@ import ro.hacktm.oradea.epiata.model.entity.Vegetables;
 
 @Data
 public class CategoryDto {
-
-    private Fruits fruits;
-    private Vegetables vegetables;
+	private Fruits fruits;
+	private Vegetables vegetables;
 }
