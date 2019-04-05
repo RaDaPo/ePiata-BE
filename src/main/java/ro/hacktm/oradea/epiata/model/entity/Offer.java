@@ -18,6 +18,7 @@ public class Offer {
     private Long id;
     private String name;
     private String owner;
+    private Category category;
     @Column(name = "start_date")
     private Date startDate;
     @Column(name = "end_date")
@@ -25,6 +26,9 @@ public class Offer {
     @Column(name = "img_link")
     private String imgLocation;
     private String description;
+    @ManyToOne()
+    @JoinColumn(name = "user_id")
+    private User user;
 
     public OfferDto toDto() {
         OfferDto dto = new OfferDto();

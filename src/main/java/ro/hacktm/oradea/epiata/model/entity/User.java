@@ -1,10 +1,12 @@
 package ro.hacktm.oradea.epiata.model.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.Getter;
 import lombok.Setter;
 import ro.hacktm.oradea.epiata.model.dto.UserDto;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 @Table(name = "USER")
@@ -19,6 +21,13 @@ public class User {
     private String name;
     private String address;
     private String email;
+    @OneToMany(mappedBy="user")
+    @JsonBackReference
+    private List<Tender> tenders;
+    @OneToMany(mappedBy="user")
+    @JsonBackReference
+    private List<Offer> offers;
+
 
     public UserDto toDto() {
         UserDto dto = new UserDto();

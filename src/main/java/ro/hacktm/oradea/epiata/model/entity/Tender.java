@@ -23,6 +23,9 @@ public class Tender {
     private String distance;
     private String owner;
     private boolean status;
+    @ManyToOne()
+    @JoinColumn(name = "user_id")
+    private User user;
 
     public TenderDto toDto() {
         TenderDto dto = new TenderDto();
