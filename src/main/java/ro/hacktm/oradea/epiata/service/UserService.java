@@ -1,5 +1,6 @@
 package ro.hacktm.oradea.epiata.service;
 
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ro.hacktm.oradea.epiata.model.dto.UserDto;
@@ -19,4 +20,11 @@ public class UserService {
         List<User> entity = repository.findAll();
         return entity.stream().map(User::toDto).collect(Collectors.toList());
     }
+
+    public void createUser(UserDto userDto) {
+        User userEntity = new User();
+        BeanUtils.copyProperties(userDto, userEntity);
+        repository.save(userEntity);
+    }
+
 }

@@ -1,8 +1,6 @@
 package ro.hacktm.oradea.epiata.model.dto;
 
 import lombok.Data;
-import lombok.Getter;
-import lombok.Setter;
 
 @Data
 public class TenderDto {

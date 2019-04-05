@@ -21,10 +21,10 @@ public class User {
 
     private String name;
     private String email;
-    @OneToMany(mappedBy="user")
+    @OneToMany(mappedBy = "user")
     @JsonBackReference
     private List<Tender> tenders;
-    @OneToMany(mappedBy="user")
+    @OneToMany(mappedBy = "user")
     @JsonBackReference
     private List<Offer> offers;
 
