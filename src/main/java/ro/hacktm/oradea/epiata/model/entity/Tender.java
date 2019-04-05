@@ -1,7 +1,10 @@
 package ro.hacktm.oradea.epiata.model.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.Data;
 import ro.hacktm.oradea.epiata.model.dto.TenderDto;
+import ro.hacktm.oradea.epiata.model.dto.UserDto;
 
 import javax.persistence.*;
 import java.util.List;
@@ -22,8 +25,14 @@ public class Tender {
     private String distance;
     private String owner;
     private boolean status;
-    @ManyToMany(mappedBy = "tenders")
-    private List<User> user;
+    @ManyToMany(cascade = { CascadeType.ALL })
+    @JoinTable(
+            name = "User_Tender",
+            joinColumns = { @JoinColumn(name = "user_id") },
+            inverseJoinColumns = { @JoinColumn(name = "tender_id") }
+    )
+    @JsonBackReference
+    private List<User> users;
 
     public TenderDto toDto() {
         TenderDto dto = new TenderDto();
@@ -33,6 +42,7 @@ public class Tender {
         dto.setOwner(this.getOwner());
         dto.setPricePerUnit(this.getPricePerUnit());
         dto.setUnit(this.getUnit());
+        dto.setUsers(this.getUsers());
         return dto;
     }
 }

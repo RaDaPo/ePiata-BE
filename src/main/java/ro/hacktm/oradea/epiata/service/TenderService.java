@@ -7,6 +7,7 @@ import ro.hacktm.oradea.epiata.model.entity.Tender;
 import ro.hacktm.oradea.epiata.repository.TenderRepository;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -22,5 +23,9 @@ public class TenderService {
 
     public void save(Tender tender) {
         repository.save(tender);
+    }
+
+    public Optional<Tender> getTenderById(Long id) {
+        return repository.findById(id);
     }
 }

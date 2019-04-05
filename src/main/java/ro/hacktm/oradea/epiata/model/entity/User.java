@@ -1,6 +1,7 @@
 package ro.hacktm.oradea.epiata.model.entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.Data;
 import ro.hacktm.oradea.epiata.model.dto.UserDto;
 
@@ -21,12 +22,7 @@ public class User {
 
     private String name;
     private String email;
-    @ManyToMany(cascade = { CascadeType.ALL })
-    @JoinTable(
-            name = "User_Tender",
-            joinColumns = { @JoinColumn(name = "user_id") },
-            inverseJoinColumns = { @JoinColumn(name = "tender_id") }
-    )
+    @ManyToMany(mappedBy = "users")
     private List<Tender> tenders;
     @OneToMany(mappedBy="user")
     @JsonBackReference
