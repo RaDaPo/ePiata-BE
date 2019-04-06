@@ -27,7 +27,7 @@ public class UserDao {
 	private List<TenderDao> tenders;
 	@OneToMany(mappedBy = "user")
 	@JsonBackReference
-	private List<OfferDao> offers;
+	private List<Offer> offers;
 	private Boolean accepted;
 
 	public UserDto toDto() {

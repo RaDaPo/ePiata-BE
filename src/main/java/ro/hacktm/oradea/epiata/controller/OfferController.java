@@ -17,7 +17,11 @@ public class OfferController implements OfferApi {
 
 	private final OfferService service;
 
-	public ResponseEntity getAllOffers(GetAllOffersRequest request) {
+	public ResponseEntity getAllOffers() {
+		return getResponseEntityOk(service.getAllOffers());
+	}
+
+	public ResponseEntity getAllFilteredOffers(GetAllOffersRequest request) {
 		return getResponseEntityOk(service.getAllOffers(request));
 	}
 

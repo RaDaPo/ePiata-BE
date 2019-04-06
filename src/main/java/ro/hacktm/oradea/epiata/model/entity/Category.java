@@ -7,7 +7,7 @@ import javax.persistence.*;
 
 @Entity(name = "CATEGORIES")
 @Data
-public class CategoryDao {
+public class Category {
 
 	@Id
 	@GeneratedValue
