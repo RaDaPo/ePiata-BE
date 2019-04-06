@@ -1,10 +1,10 @@
-package ro.hacktm.oradea.epiata.controller.impl;
+package ro.hacktm.oradea.epiata.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RestController;
-import ro.hacktm.oradea.epiata.controller.TenderApi;
+import ro.hacktm.oradea.epiata.apis.TenderApi;
 import ro.hacktm.oradea.epiata.model.dto.TenderDto;
 import ro.hacktm.oradea.epiata.model.entity.TenderDao;
 import ro.hacktm.oradea.epiata.model.entity.UserDao;

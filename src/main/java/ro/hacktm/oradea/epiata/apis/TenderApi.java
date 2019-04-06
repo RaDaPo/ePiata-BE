@@ -1,4 +1,4 @@
-package ro.hacktm.oradea.epiata.controller;
+package ro.hacktm.oradea.epiata.apis;
 
 import org.springframework.web.bind.annotation.*;
 import ro.hacktm.oradea.epiata.model.dto.TenderDto;
