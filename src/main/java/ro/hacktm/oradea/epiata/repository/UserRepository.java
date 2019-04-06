@@ -8,5 +8,5 @@ import java.util.List;
 
 @Repository
 public interface UserRepository extends PagingAndSortingRepository<UserDao, Long> {
-    List<UserDao> findAll();
+	List<UserDao> findAll();
 }

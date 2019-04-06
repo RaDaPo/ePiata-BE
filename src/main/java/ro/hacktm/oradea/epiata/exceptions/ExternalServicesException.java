@@ -5,7 +5,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 
 @ResponseStatus(HttpStatus.NOT_FOUND)
 public class ExternalServicesException extends RuntimeException {
-    public ExternalServicesException(String m) {
-        super(m);
-    }
+	public ExternalServicesException(String m) {
+		super(m);
+	}
 }

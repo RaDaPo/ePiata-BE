@@ -13,21 +13,21 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 @EnableSwagger2
 public class SwaggerConfig {
 
-    private ApiInfo apiInfo() {
-        return new ApiInfoBuilder()
-                .title("HackTM - ePiata")
-                .description("An electronic application that help local farms to get in touch with the big vendors.")
-                .version("1.0.0")
-                .build();
-    }
+	private ApiInfo apiInfo() {
+		return new ApiInfoBuilder()
+				.title("HackTM - ePiata")
+				.description("An electronic application that help local farms to get in touch with the big vendors.")
+				.version("1.0.0")
+				.build();
+	}
 
-    @Bean
-    public Docket api() {
-        return new Docket(DocumentationType.SWAGGER_2)
-                .select()
-                .apis(RequestHandlerSelectors.basePackage("ro.hacktm.oradea.epiata"))
-                .build()
-                .apiInfo(apiInfo())
-                .pathMapping("/");
-    }
+	@Bean
+	public Docket api() {
+		return new Docket(DocumentationType.SWAGGER_2)
+				.select()
+				.apis(RequestHandlerSelectors.basePackage("ro.hacktm.oradea.epiata"))
+				.build()
+				.apiInfo(apiInfo())
+				.pathMapping("/");
+	}
 }

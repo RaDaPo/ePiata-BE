@@ -8,6 +8,6 @@ import java.util.List;
 @Data
 public class DistanceContent {
 
-    @JsonProperty(value = "results")
-    List<DistanceDto> distanceContentList;
+	@JsonProperty(value = "results")
+	List<DistanceDto> distanceContentList;
 }

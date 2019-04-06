@@ -1,62 +1,50 @@
 package ro.hacktm.oradea.epiata.controller;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RestController;
 import ro.hacktm.oradea.epiata.apis.TenderApi;
-import ro.hacktm.oradea.epiata.model.dto.TenderDto;
-import ro.hacktm.oradea.epiata.model.entity.AcceptedUser;
+import ro.hacktm.oradea.epiata.model.dto.TenderAcceptUser;
+import ro.hacktm.oradea.epiata.model.dto.TenderAddUsersRequestDto;
+import ro.hacktm.oradea.epiata.model.dto.TenderRequestDto;
+import ro.hacktm.oradea.epiata.model.dto.TenderResponseDto;
 import ro.hacktm.oradea.epiata.model.entity.TenderDao;
-import ro.hacktm.oradea.epiata.model.entity.UserDao;
+import ro.hacktm.oradea.epiata.repository.TenderAttendeesRepository;
 import ro.hacktm.oradea.epiata.service.TenderService;
 import ro.hacktm.oradea.epiata.service.UserService;
 
-import java.util.Collections;
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
 public class TenderController implements TenderApi {
 
-    private final TenderService tenderService;
-    private final UserService userService;
+	private final TenderService tenderService;
+	private final UserService userService;
+	private final TenderAttendeesRepository tenderAttendeesRepository;
 
-    public List<TenderDto> getAllUsers() {
-        return tenderService.getAllTenders();
-    }
+	public List<TenderResponseDto> getAllUsers() {
+		return tenderService.getAllTenders();
+	}
 
-    public TenderDao addTender(TenderDto tenderDto) {
-        TenderDao tender = new TenderDao();
-        BeanUtils.copyProperties(tenderDto, tender);
-        tenderService.save(tender);
-        return tender;
-    }
+	public TenderResponseDto addTender(TenderRequestDto tenderRequestDto) {
+		return tenderService.addNewTender(tenderRequestDto);
+	}
 
-    public TenderDao updateTender(TenderDto tenderDto, Long id) {
-        Optional<TenderDao> tender = tenderService.getTenderById(id);
-        if (tender.isPresent()) {
-            Optional<UserDao> user = userService.getUserById(tenderDto.getUserId());
-            user.ifPresent(value -> tender.get().getUsers().add(value));
-            tenderService.save(tender.get());
-        }
-        return tender.orElseThrow(RuntimeException::new);
-    }
+	public TenderDao addUsersToTender(TenderAddUsersRequestDto tenderRequestDto) {
+		return tenderService.addAttendeesToTender(tenderRequestDto);
+	}
 
-    public void acceptUser(Long userId, Long id) {
-        Optional<TenderDao> tender = tenderService.getTenderById(id);
-        if (tender.isPresent()) {
-            if (tender.get().getAcceptedUserIds() != null) {
-                AcceptedUser acceptedUser = new AcceptedUser();
-                acceptedUser.setUserId(userId);
-                tender.get().getAcceptedUserIds().add(acceptedUser);
-            } else {
-                AcceptedUser acceptedUser = new AcceptedUser();
-                acceptedUser.setUserId(userId);
-                tender.get().setAcceptedUserIds(Collections.singletonList(acceptedUser));
-            }
-            tenderService.save(tender.get());
-        }
-    }
+	public void acceptUser(TenderAcceptUser acceptUser) {
+		tenderService.acceptAttendeeToTender(acceptUser);
+	}
+
+	public void declineUser(TenderAcceptUser acceptUser) {
+		tenderService.declineAttendeeFromTender(acceptUser);
+	}
+
+	public List<TenderDao> findTendersByDescriptionContaining(String searchPhrase) {
+		return tenderService.findByDescriptionContaining(searchPhrase);
+	}
+
 }

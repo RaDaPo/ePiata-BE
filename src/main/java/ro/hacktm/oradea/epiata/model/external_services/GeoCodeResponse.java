@@ -6,6 +6,6 @@ import lombok.Data;
 @Data
 public class GeoCodeResponse {
 
-    @JsonProperty(value = "Response")
-    private GeoCodeResponseContent geoCodeResponseContent;
+	@JsonProperty(value = "Response")
+	private GeoCodeResponseContent geoCodeResponseContent;
 }

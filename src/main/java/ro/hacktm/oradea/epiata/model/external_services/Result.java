@@ -6,7 +6,7 @@ import lombok.Data;
 @Data
 public class Result {
 
-    @JsonProperty(value = "Location")
-    private LocationResponse location;
+	@JsonProperty(value = "Location")
+	private LocationResponse location;
 
 }

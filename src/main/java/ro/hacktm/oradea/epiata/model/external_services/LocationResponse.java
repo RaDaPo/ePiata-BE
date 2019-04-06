@@ -6,6 +6,6 @@ import lombok.Data;
 @Data
 public class LocationResponse {
 
-    @JsonProperty("DisplayPosition")
-    private DisplayLocationDto displayLocation;
+	@JsonProperty("DisplayPosition")
+	private DisplayLocationDto displayLocation;
 }

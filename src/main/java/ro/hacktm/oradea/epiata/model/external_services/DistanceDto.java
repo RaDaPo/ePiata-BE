@@ -5,9 +5,9 @@ import lombok.Data;
 @Data
 public class DistanceDto {
 
-    private long time;
-    private int distance;
+	private long time;
+	private int distance;
 
-    private String timeInMin;
-    private String distanceInKm;
+	private String timeInMin;
+	private String distanceInKm;
 }

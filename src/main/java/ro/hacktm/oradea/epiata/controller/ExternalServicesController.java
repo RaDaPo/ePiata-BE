@@ -11,9 +11,9 @@ import ro.hacktm.oradea.epiata.service.ExternalServices;
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
 public class ExternalServicesController implements ExternalServicesApi {
 
-    private final ExternalServices externalServices;
+	private final ExternalServices externalServices;
 
-    public DistanceDto getDistanceBetweenLocations(String startLocation, String endLocation) {
-        return externalServices.getDistanceBetweenLocations(startLocation, endLocation);
-    }
+	public DistanceDto getDistanceBetweenLocations(String startLocation, String endLocation) {
+		return externalServices.getDistanceBetweenLocations(startLocation, endLocation);
+	}
 }
