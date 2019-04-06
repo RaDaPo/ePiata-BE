@@ -6,6 +6,7 @@ import ro.hacktm.oradea.epiata.model.dto.UserDto;
 
 import java.util.List;
 
+@CrossOrigin
 @RequestMapping("/api/users")
 public interface UsersApi {
 

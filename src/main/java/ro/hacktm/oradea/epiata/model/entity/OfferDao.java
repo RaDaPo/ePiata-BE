@@ -16,8 +16,10 @@ public class OfferDao {
     private Long id;
     private String name;
     private String owner;
-    @Embedded
-    private CategoryDao category;
+
+    @JoinColumn
+    private Long category;
+
     @Column(name = "start_date")
     private Date startDate;
     @Column(name = "end_date")

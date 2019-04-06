@@ -7,6 +7,7 @@ import ro.hacktm.oradea.epiata.model.entity.TenderDao;
 
 import java.util.List;
 
+@CrossOrigin
 @RequestMapping(path = "/api/tenders")
 public interface TenderApi {
 
