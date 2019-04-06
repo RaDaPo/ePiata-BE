@@ -36,7 +36,8 @@ public class ExternalServices {
         HttpEntity entity = getHttpEntity();
         ResponseEntity<DistanceContent> response = restTemplate
                 .exchange(DISTANCE_URL, HttpMethod.GET, entity, DistanceContent.class, params);
-        return getDistanceContent(response);
+        DistanceDto dto = getDistanceContent(response);
+        return formatUnitTypes(dto);
     }
 
     DisplayLocationDto getAddressGeoCode(String address) {
@@ -46,6 +47,21 @@ public class ExternalServices {
                 .exchange(GEO_CODE_URL, HttpMethod.GET, entity, GeoCodeResponse.class, params);
         return getLocation(response);
     }
+
+    private DistanceDto formatUnitTypes(DistanceDto dto) {
+        dto.setTimeToDestination(formatTime(dto.getTime()));
+        dto.setTimeToDestination(formatDistance(dto.getDistance()));
+        return dto;
+    }
+
+    private String formatDistance(long distance) {
+        return String.valueOf(distance * 0.001);
+    }
+
+    private String formatTime(long time) {
+        return String.valueOf((time % 3600) / 60);
+    }
+
 
     private DistanceDto getDistanceContent(ResponseEntity<DistanceContent> response) {
         try {
