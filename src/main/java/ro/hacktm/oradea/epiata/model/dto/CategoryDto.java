@@ -1,11 +1,11 @@
 package ro.hacktm.oradea.epiata.model.dto;
 
 import lombok.Data;
-import ro.hacktm.oradea.epiata.model.entity.Fruits;
-import ro.hacktm.oradea.epiata.model.entity.Vegetables;
+import ro.hacktm.oradea.epiata.model.entity.enums.CategoryType;
 
 @Data
 public class CategoryDto {
-	private Fruits fruits;
-	private Vegetables vegetables;
+	private Long id;
+	private CategoryType type;
+	private String name;
 }

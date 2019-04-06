@@ -2,25 +2,27 @@ package ro.hacktm.oradea.epiata.model.entity;
 
 import lombok.Data;
 import ro.hacktm.oradea.epiata.model.dto.CategoryDto;
+import ro.hacktm.oradea.epiata.model.entity.enums.CategoryType;
 
-import javax.persistence.Embeddable;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
+import javax.persistence.*;
 
-@Embeddable
+@Entity(name = "CATEGORIES")
 @Data
 public class CategoryDao {
 
-	@Enumerated(EnumType.STRING)
-	private Fruits fruits;
+	@Id
+	@GeneratedValue
+	private Long id;
 
 	@Enumerated(EnumType.STRING)
-	private Vegetables vegetables;
+	private CategoryType type;
+	private String name;
 
 	public CategoryDto toDto() {
 		CategoryDto dto = new CategoryDto();
-		dto.setFruits(this.fruits);
-		dto.setVegetables(this.vegetables);
+		dto.setId(getId());
+		dto.setType(getType());
+		dto.setName(getName());
 		return dto;
 	}
 }
