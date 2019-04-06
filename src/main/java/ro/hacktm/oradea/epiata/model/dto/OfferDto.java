@@ -12,4 +12,5 @@ public class OfferDto {
 	private Long id;
 	private String quantity;
 	private String price;
+	private String county;
 }
