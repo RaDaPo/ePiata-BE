@@ -29,7 +29,7 @@ public class TenderDao {
 			joinColumns = {@JoinColumn(name = "user_id")},
 			inverseJoinColumns = {@JoinColumn(name = "tender_id")}
 	)
-	@JsonBackReference
+//	@JsonBackReference
 	private List<UserDao> users;
 
 	public TenderDto toDto() {
