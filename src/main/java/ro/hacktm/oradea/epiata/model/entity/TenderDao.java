@@ -10,7 +10,7 @@ import java.util.List;
 @Entity
 @Table(name = "TENDER")
 @Data
-public class Tender {
+public class TenderDao {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
@@ -30,7 +30,7 @@ public class Tender {
 			inverseJoinColumns = {@JoinColumn(name = "tender_id")}
 	)
 	@JsonBackReference
-	private List<User> users;
+	private List<UserDao> users;
 
 	public TenderDto toDto() {
 		TenderDto dto = new TenderDto();

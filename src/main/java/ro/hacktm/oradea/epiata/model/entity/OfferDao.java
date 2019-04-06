@@ -9,7 +9,7 @@ import java.util.Date;
 @Entity
 @Table(name = "OFFER")
 @Data
-public class Offer {
+public class OfferDao {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
@@ -17,7 +17,7 @@ public class Offer {
 	private String name;
 	private String owner;
 	@Embedded
-	private Category category;
+	private CategoryDao category;
 	@Column(name = "start_date")
 	private Date startDate;
 	@Column(name = "end_date")
@@ -27,7 +27,7 @@ public class Offer {
 	private String description;
 	@ManyToOne()
 	@JoinColumn(name = "user_id")
-	private User user;
+	private UserDao user;
 
 	public OfferDto toDto() {
 		OfferDto dto = new OfferDto();

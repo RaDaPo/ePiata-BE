@@ -5,8 +5,8 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import ro.hacktm.oradea.epiata.model.dto.TenderDto;
-import ro.hacktm.oradea.epiata.model.entity.Tender;
-import ro.hacktm.oradea.epiata.model.entity.User;
+import ro.hacktm.oradea.epiata.model.entity.TenderDao;
+import ro.hacktm.oradea.epiata.model.entity.UserDao;
 import ro.hacktm.oradea.epiata.service.TenderService;
 import ro.hacktm.oradea.epiata.service.UserService;
 
@@ -28,18 +28,18 @@ public class TenderController {
 	}
 
 	@PostMapping
-	Tender addTender(@RequestBody TenderDto tenderDto) {
-		Tender tender = new Tender();
+	TenderDao addTender(@RequestBody TenderDto tenderDto) {
+		TenderDao tender = new TenderDao();
 		BeanUtils.copyProperties(tenderDto, tender);
 		tenderService.save(tender);
 		return tender;
 	}
 
 	@PutMapping(value = "/{id}")
-	Tender updateTender(@RequestBody TenderDto tenderDto, @RequestParam(name = "id") Long id) {
-		Optional<Tender> tender = tenderService.getTenderById(id);
+	TenderDao updateTender(@RequestBody TenderDto tenderDto, @RequestParam(name = "id") Long id) {
+		Optional<TenderDao> tender = tenderService.getTenderById(id);
 		if (tender.isPresent()) {
-			Optional<User> user = userService.getUserById(id);
+			Optional<UserDao> user = userService.getUserById(id);
 			user.ifPresent(value -> tender.get().getUsers().add(value));
 			tenderService.save(tender.get());
 		}

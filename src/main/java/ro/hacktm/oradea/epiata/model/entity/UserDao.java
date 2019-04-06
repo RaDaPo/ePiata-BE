@@ -10,7 +10,7 @@ import java.util.List;
 @Entity
 @Table(name = "USER")
 @Data
-public class User {
+public class UserDao {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
@@ -22,10 +22,10 @@ public class User {
 	private String name;
 	private String email;
 	@ManyToMany(mappedBy = "users")
-	private List<Tender> tenders;
+	private List<TenderDao> tenders;
 	@OneToMany(mappedBy = "user")
 	@JsonBackReference
-	private List<Offer> offers;
+	private List<OfferDao> offers;
 
 	public UserDto toDto() {
 		UserDto dto = new UserDto();

@@ -9,7 +9,7 @@ import javax.persistence.Enumerated;
 
 @Embeddable
 @Data
-public class Category {
+public class CategoryDao {
 
 	@Enumerated(EnumType.STRING)
 	private Fruits fruits;

@@ -1,7 +1,7 @@
 package ro.hacktm.oradea.epiata.model.dto;
 
 import lombok.Data;
-import ro.hacktm.oradea.epiata.model.entity.User;
+import ro.hacktm.oradea.epiata.model.entity.UserDao;
 
 import java.util.List;
 
@@ -15,5 +15,5 @@ public class TenderDto {
 	private String owner;
 	private boolean status;
 	private Long userId;
-	private List<User> users;
+	private List<UserDao> users;
 }
