@@ -19,9 +19,10 @@ public class TenderAddRequest {
 	private Double pricePerUnit;
 	private String distance;
 	private Long ownerId;
+	private String categoryName;
 	private Integer neededGrossMass;
-	@Enumerated(EnumType.STRING)
-	private CategoryType type;
+//	@Enumerated(EnumType.STRING)
+//	private CategoryType type;
 	@Temporal(TemporalType.DATE)
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
 	private Date startDate;

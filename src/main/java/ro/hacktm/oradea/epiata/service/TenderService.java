@@ -7,10 +7,8 @@ import org.springframework.stereotype.Service;
 import ro.hacktm.oradea.epiata.exception.NeededGrossMassExceeded;
 import ro.hacktm.oradea.epiata.exception.TenderNotFoundException;
 import ro.hacktm.oradea.epiata.model.dto.*;
-import ro.hacktm.oradea.epiata.model.entity.AcceptedUser;
-import ro.hacktm.oradea.epiata.model.entity.TenderAttendee;
-import ro.hacktm.oradea.epiata.model.entity.TenderDao;
-import ro.hacktm.oradea.epiata.model.entity.UserDao;
+import ro.hacktm.oradea.epiata.model.entity.*;
+import ro.hacktm.oradea.epiata.repository.CategoryRepository;
 import ro.hacktm.oradea.epiata.repository.TenderAttendeesRepository;
 import ro.hacktm.oradea.epiata.repository.TenderRepository;
 
@@ -27,6 +25,7 @@ public class TenderService {
 	private final TenderRepository repository;
 	private final UserService userService;
 	private final TenderAttendeesRepository tenderAttendeesRepository;
+	private final CategoryRepository categoryRepository;
 
 	public List<TenderResponseDto> getAllTenders() {
 		return repository.findAllByActiveTrue()
@@ -40,11 +39,12 @@ public class TenderService {
 		TenderDao tender = new TenderDao();
 		BeanUtils.copyProperties(tenderRequestDto, tender);
 		Optional<UserDao> owner = userService.getUserDaoById(tenderRequestDto.getOwnerId());
+		Optional<Category> category = categoryRepository.findByName(tenderRequestDto.getCategoryName());
 		if (owner.isPresent()) {
 			owner.ifPresent(userDao -> tender.setOwner(userDao.toOwnerDao()));
 			tender.setLocation(owner.get().getLocation());
 		}
-//		tender.setTitle(tenderRequestDto.getTitle());
+		category.ifPresent(tender::setCategory);
 		save(tender);
 		return tender.toDto();
 	}

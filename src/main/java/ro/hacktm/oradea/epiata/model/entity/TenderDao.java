@@ -32,8 +32,6 @@ public class TenderDao {
 	@Temporal(TemporalType.DATE)
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
 	private Date endDate;
-	@Enumerated(EnumType.STRING)
-	private CategoryType type;
 	private String unit;
 	@OneToMany(cascade = {CascadeType.ALL})
 	@JsonManagedReference
@@ -41,6 +39,8 @@ public class TenderDao {
 	private List<AcceptedUser> acceptedUserIds;
 	@OneToOne(cascade = {CascadeType.ALL})
 	private TenderOwner owner;
+	@OneToOne(cascade = {CascadeType.ALL})
+	private Category category;
 	@OneToMany(cascade = {CascadeType.ALL})
 	@JsonManagedReference
 	@JsonIgnore
@@ -69,7 +69,8 @@ public class TenderDao {
 		dto.setStartDate(this.getStartDate());
 		dto.setEndDate(this.getEndDate());
 		dto.setLocation(this.getLocation());
-		dto.setType(this.getType());
+		dto.setCategoryName(this.getCategory().getName());
+		dto.setCategoryType(this.getCategory().getType().toString());
 		return dto;
 	}
 }
