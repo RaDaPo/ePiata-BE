@@ -5,6 +5,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ro.hacktm.oradea.epiata.exception.NeededGrossMassExceeded;
+import ro.hacktm.oradea.epiata.exception.TenderNotFoundException;
 import ro.hacktm.oradea.epiata.model.dto.*;
 import ro.hacktm.oradea.epiata.model.entity.AcceptedUser;
 import ro.hacktm.oradea.epiata.model.entity.TenderAttendee;
@@ -50,20 +51,23 @@ public class TenderService {
 
 	public TenderDao addAttendeesToTender(TenderAddUsersRequestDto tenderRequestDto) {
 		Optional<TenderDao> tender = getTenderById(tenderRequestDto.getTenderId());
-		if (tender.isPresent() && getNeededGrossMassPlusMarje(tender.get()) > tenderRequestDto.getParticipationMass()) {
-			Optional<UserDao> user = userService.getUserDaoById(tenderRequestDto.getUserId());
-			if (user.isPresent()) {
-				tender.get().setGatheredGrossMass(tender.get().getGatheredGrossMass() + tenderRequestDto.getParticipationMass());
-				TenderAttendee tenderAttendee = new TenderAttendee();
-				tenderAttendee.setUserId(user.get().getId());
-				tenderAttendee.setParticipationMass(tenderRequestDto.getParticipationMass());
-				tenderAttendee.setName(user.get().getName());
-				tender.get().getAllTenderAttendees().add(tenderAttendee);
-				save(tender.get());
+		if(tender.isPresent()) {
+			if (getNeededGrossMassPlusMarje(tender.get()) > tenderRequestDto.getParticipationMass()) {
+				Optional<UserDao> user = userService.getUserDaoById(tenderRequestDto.getUserId());
+				if (user.isPresent()) {
+					tender.get().setGatheredGrossMass(tender.get().getGatheredGrossMass() + tenderRequestDto.getParticipationMass());
+					TenderAttendee tenderAttendee = new TenderAttendee();
+					tenderAttendee.setUserId(user.get().getId());
+					tenderAttendee.setParticipationMass(tenderRequestDto.getParticipationMass());
+					tenderAttendee.setName(user.get().getName());
+					tender.get().getAllTenderAttendees().add(tenderAttendee);
+					save(tender.get());
+				}
+				return tender.get();
 			}
-			return tender.get();
+			throw new NeededGrossMassExceeded(getNeededGrossMassPlusMarje(tender.get()) - tender.get().getGatheredGrossMass());
 		}
-		throw new NeededGrossMassExceeded();
+		throw new TenderNotFoundException(tenderRequestDto.getTenderId());
 	}
 
 	private int getNeededGrossMassPlusMarje(TenderDao tender) {
@@ -100,6 +104,10 @@ public class TenderService {
 		tender.setGatheredGrossMass(tender.getGatheredGrossMass() + tenderAttendee.getParticipationMass());
 		acceptedUser.setName(user.getName());
 		tender.getAcceptedUsers().add(user);
+		if( tender.getGatheredGrossMass() >= tender.getNeededGrossMass() || tender.getGatheredGrossMass() < (tender.getNeededGrossMass() + tender.getNeededGrossMass() / 5 ) ) {
+			tender.setStatus(false);
+			tender.setActive(false);
+		}
 		save(tender);
 	}
 
@@ -124,7 +132,7 @@ public class TenderService {
 	}
 
 	public List<TenderDao> findByDescriptionContaining(String searchPhrase) {
-		return repository.findByDescriptionOrTitleContainingAndActiveTrue(searchPhrase);
+		return repository.findByDescriptionOrTitleContainingAndActiveTrue(searchPhrase, searchPhrase);
 	}
 
 	public List<TenderDao> findByCategoryTypeAndCounty(TenderFilteredRequestDto requestDto) {

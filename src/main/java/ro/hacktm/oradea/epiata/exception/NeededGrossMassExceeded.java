@@ -3,10 +3,10 @@ package ro.hacktm.oradea.epiata.exception;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
-@ResponseStatus(value = HttpStatus.NOT_FOUND)
+@ResponseStatus(value = HttpStatus.FORBIDDEN)
 public class NeededGrossMassExceeded extends RuntimeException {
 
-	public NeededGrossMassExceeded() {
-		super("The need for this tender has been exceeded or the tender does not exists");
+	public NeededGrossMassExceeded(Integer mass) {
+		super("Remaining need for this tender is maximum: " + mass +"kg");
 	}
 }
