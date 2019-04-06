@@ -43,4 +43,8 @@ public class TenderController implements TenderApi {
 		tenderService.declineAttendeeFromTender(acceptUser);
 	}
 
+	public List<TenderDao> findTendersByDescriptionContaining(String searchPhrase) {
+		return tenderService.findByDescriptionContaining(searchPhrase);
+	}
+
 }

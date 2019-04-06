@@ -30,4 +30,7 @@ public interface TenderApi {
 	@PutMapping(value = "/decline")
 	@ResponseStatus(value = HttpStatus.NO_CONTENT)
 	void declineUser(@RequestBody TenderAcceptUser acceptUser);
+
+	@GetMapping(value = "/search")
+	List<TenderDao> findTendersByDescriptionContaining(@RequestParam(name = "searchPhrase") String searchPhrase);
 }

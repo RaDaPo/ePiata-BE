@@ -105,4 +105,7 @@ public class TenderService {
 		return repository.findById(id);
 	}
 
+	public List<TenderDao> findByDescriptionContaining(String searchPhrase) {
+		return repository.findByDescriptionContaining(searchPhrase);
+	}
 }
