@@ -2,7 +2,6 @@ package ro.hacktm.oradea.epiata.model.entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.Data;
 import ro.hacktm.oradea.epiata.model.dto.UserDto;
 
@@ -29,11 +28,13 @@ public class UserDao {
 	@OneToMany(mappedBy = "user")
 	@JsonBackReference
 	private List<OfferDao> offers;
+	private Boolean accepted;
 
 	public UserDto toDto() {
 		UserDto dto = new UserDto();
 		dto.setEmail(this.getEmail());
 		dto.setName(this.getName());
+		dto.setAccepted(this.accepted);
 		dto.setLocation(this.location);
 		return dto;
 	}

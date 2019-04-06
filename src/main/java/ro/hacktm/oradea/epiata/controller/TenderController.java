@@ -39,7 +39,7 @@ public class TenderController {
 	TenderDao updateTender(@RequestBody TenderDto tenderDto, @RequestParam(name = "id") Long id) {
 		Optional<TenderDao> tender = tenderService.getTenderById(id);
 		if (tender.isPresent()) {
-			Optional<UserDao> user = userService.getUserById(id);
+			Optional<UserDao> user = userService.getUserById(tenderDto.getUserId());
 			user.ifPresent(value -> tender.get().getUsers().add(value));
 			tenderService.save(tender.get());
 		}
