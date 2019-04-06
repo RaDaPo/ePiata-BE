@@ -19,7 +19,6 @@ public class TenderAddRequest {
 	private Double pricePerUnit;
 	private String distance;
 	private Long ownerId;
-	private boolean status;
 	private Integer neededGrossMass;
 	@Enumerated(EnumType.STRING)
 	private CategoryType type;
