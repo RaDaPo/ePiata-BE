@@ -1,9 +1,10 @@
-package ro.hacktm.oradea.epiata.controller;
+package ro.hacktm.oradea.epiata.controller.impl;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.RestController;
+import ro.hacktm.oradea.epiata.controller.TenderApi;
 import ro.hacktm.oradea.epiata.model.dto.TenderDto;
 import ro.hacktm.oradea.epiata.model.entity.TenderDao;
 import ro.hacktm.oradea.epiata.model.entity.UserDao;
@@ -14,29 +15,24 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-@SuppressWarnings("unused")
-@RequestMapping(path = "/api/tenders")
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
-public class TenderController {
+public class TenderController implements TenderApi {
 
 	private final TenderService tenderService;
 	private final UserService userService;
 
-	@GetMapping
-	List<TenderDto> getAllUsers() {
+	public List<TenderDto> getAllUsers() {
 		return tenderService.getAllTenders();
 	}
 
-	@PostMapping
-	TenderDao addTender(@RequestBody TenderDto tenderDto) {
+	public TenderDao addTender(TenderDto tenderDto) {
 		TenderDao tender = new TenderDao();
 		BeanUtils.copyProperties(tenderDto, tender);
 		tenderService.save(tender);
 		return tender;
 	}
 
-	@PutMapping(value = "/{id}")
-	TenderDao updateTender(@RequestBody TenderDto tenderDto, @RequestParam(name = "id") Long id) {
+	public TenderDao updateTender(TenderDto tenderDto, Long id) {
 		Optional<TenderDao> tender = tenderService.getTenderById(id);
 		if (tender.isPresent()) {
 			Optional<UserDao> user = userService.getUserById(id);
