@@ -15,6 +15,6 @@ public interface TenderRepository extends PagingAndSortingRepository<TenderDao, 
 
 	List<TenderDao> findByDescriptionOrTitleContainingAndActiveTrue(String searchPhrase, String title);
 
-	List<TenderDao> findByTypeOrLocation_CountyAndActiveTrue(CategoryType categoryType, String county);
+	List<TenderDao> findByCategory_TypeOrLocation_CountyAndActiveTrue(CategoryType categoryType, String county);
 
 }

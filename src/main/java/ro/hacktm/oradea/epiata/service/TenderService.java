@@ -142,7 +142,7 @@ public class TenderService {
 	}
 
 	public List<TenderDao> findByCategoryTypeAndCounty(TenderFilteredRequestDto requestDto) {
-		return repository.findByTypeOrLocation_CountyAndActiveTrue(requestDto.getCategoryType(), requestDto.getCounty());
+		return repository.findByCategory_TypeOrLocation_CountyAndActiveTrue(requestDto.getCategoryType(), requestDto.getCounty());
 	}
 
 	public void findTenderByIdAndCloseIt(TenderCloseRequestDto requestDto) {
