@@ -10,5 +10,7 @@ public class Location {
 
 	String address;
 	int no;
+	String latitude;
+	String longitude;
 
 }

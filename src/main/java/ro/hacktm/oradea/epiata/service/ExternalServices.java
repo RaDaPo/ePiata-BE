@@ -3,10 +3,14 @@ package ro.hacktm.oradea.epiata.service;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
+import ro.hacktm.oradea.epiata.exceptions.ExternalServicesException;
+import ro.hacktm.oradea.epiata.model.external_services.DisplayLocation;
 import ro.hacktm.oradea.epiata.model.external_services.GeoCodeResponseDto;
+import ro.hacktm.oradea.epiata.model.external_services.LocationResponse;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 @Service
 public class ExternalServices {
@@ -19,11 +23,19 @@ public class ExternalServices {
 
     private RestTemplate restTemplate = new RestTemplate();
 
-    public Object getAddressGeoCode(String address) {
+    public DisplayLocation getAddressGeoCode(String address) {
         Map<String, String> params = getAddressInParams(address);
         HttpEntity entity = getHttpEntity();
         ResponseEntity<GeoCodeResponseDto> response = restTemplate.exchange(GEO_CODE_URL, HttpMethod.GET, entity, GeoCodeResponseDto.class, params);
-        return response.getBody();
+        return getLocation(response);
+    }
+
+    private DisplayLocation getLocation(ResponseEntity<GeoCodeResponseDto> response) {
+        try {
+            return Objects.requireNonNull(response.getBody()).getGeoCodeResponse().getGeoCodeView().get(0).getResults().get(0).getLocation().getDisplayLocation();
+        } catch (NullPointerException e) {
+            throw new ExternalServicesException("Cannot return coordinates");
+        }
     }
 
     private HttpEntity getHttpEntity() {
