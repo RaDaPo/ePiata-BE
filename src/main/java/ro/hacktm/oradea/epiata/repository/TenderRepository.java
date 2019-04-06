@@ -10,5 +10,7 @@ import java.util.List;
 public interface TenderRepository extends PagingAndSortingRepository<TenderDao, Long> {
 	List<TenderDao> findAll();
 
-	List<TenderDao> findByDescriptionContaining(String searchPhrase);
+	List<TenderDao> findAllByActiveTrue();
+
+	List<TenderDao> findByDescriptionContainingAndActiveTrue(String searchPhrase);
 }

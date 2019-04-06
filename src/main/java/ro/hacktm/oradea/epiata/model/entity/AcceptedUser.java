@@ -14,7 +14,6 @@ public class AcceptedUser {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
-
 	private Long userId;
 	private String name;
 }

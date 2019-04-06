@@ -9,7 +9,7 @@ import javax.persistence.Embeddable;
 public class Location {
 
 	String address;
-	int no;
+	Integer streetNo;
 	String latitude;
 	String longitude;
 

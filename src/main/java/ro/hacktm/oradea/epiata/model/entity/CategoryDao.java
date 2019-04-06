@@ -12,7 +12,6 @@ public class CategoryDao {
 	@Id
 	@GeneratedValue
 	private Long id;
-
 	@Enumerated(EnumType.STRING)
 	private CategoryType type;
 	private String name;

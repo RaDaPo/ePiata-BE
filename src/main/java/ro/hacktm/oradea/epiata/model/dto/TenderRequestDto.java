@@ -5,8 +5,8 @@ import lombok.Data;
 import java.util.List;
 
 @Data
-public class TenderRequestDto {
-	private String name;
+class TenderRequestDto {
+	private String title;
 	private String description;
 	private String unit;
 	private String pricePerUnit;

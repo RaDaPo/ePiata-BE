@@ -1,9 +1,11 @@
 package ro.hacktm.oradea.epiata.model.entity;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 import ro.hacktm.oradea.epiata.model.dto.OfferDto;
 
 import javax.persistence.*;
+import java.util.Date;
 
 @Entity
 @Table(name = "OFFER")
@@ -20,13 +22,20 @@ public class OfferDao {
 	private Long category;
 
 	@Column(name = "start_date")
-	private String startDate;
+	@Temporal(TemporalType.DATE)
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
+
+	private Date startDate;
 	@Column(name = "end_date")
-	private String endDate;
+	@Temporal(TemporalType.DATE)
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
+
+	private Date endDate;
 	private String description;
 	@ManyToOne()
 	@JoinColumn(name = "user_id")
 	private UserDao user;
+	private Boolean active = true;
 
 	public OfferDto toDto() {
 		OfferDto dto = new OfferDto();
@@ -38,6 +47,7 @@ public class OfferDao {
 		dto.setPrice(this.getPrice());
 		dto.setQuantity(this.getQuantity());
 		dto.setId(this.getId());
+		dto.setActive(this.getActive());
 		return dto;
 	}
 

@@ -30,7 +30,7 @@ public class TenderService {
 	private final TenderAttendeesRepository tenderAttendeesRepository;
 
 	public List<TenderResponseDto> getAllTenders() {
-		return repository.findAll()
+		return repository.findAllByActiveTrue()
 				.stream()
 				.filter(Objects::nonNull)
 				.map(TenderDao::toDto)
@@ -117,6 +117,6 @@ public class TenderService {
 	}
 
 	public List<TenderDao> findByDescriptionContaining(String searchPhrase) {
-		return repository.findByDescriptionContaining(searchPhrase);
+		return repository.findByDescriptionContainingAndActiveTrue(searchPhrase);
 	}
 }

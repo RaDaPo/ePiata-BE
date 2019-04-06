@@ -1,5 +1,6 @@
 package ro.hacktm.oradea.epiata.model.entity;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.Data;
@@ -7,6 +8,7 @@ import ro.hacktm.oradea.epiata.model.dto.TenderResponseDto;
 
 import javax.persistence.*;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Entity
@@ -17,26 +19,34 @@ public class TenderDao {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
-	private String name;
-	@OneToMany(cascade = {CascadeType.ALL})
-	@JsonManagedReference
-	@JsonIgnore
-	private List<AcceptedUser> acceptedUserIds;
-	private String description;
-	private String unit;
-	@OneToOne(cascade = {CascadeType.ALL})
-	private TenderOwner owner;
+	private String title;
 	@Column(name = "price_unit")
 	private String pricePerUnit;
 	private String distance;
 	private Integer neededGrossMass = 0;
 	private Integer gatheredGrossMass = 0;
-	private boolean status;
+	private boolean status = true;
+	private String description;
+	private Boolean active = true;
+	@Temporal(TemporalType.DATE)
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
+	private Date startDate;
+	@Temporal(TemporalType.DATE)
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
+	private Date endDate;
+	@Enumerated(EnumType.STRING)
+	private CategoryType type;
+	private String unit;
+	@OneToMany(cascade = {CascadeType.ALL})
+	@JsonManagedReference
+	@JsonIgnore
+	private List<AcceptedUser> acceptedUserIds;
+	@OneToOne(cascade = {CascadeType.ALL})
+	private TenderOwner owner;
 	@OneToMany(cascade = {CascadeType.ALL})
 	@JsonManagedReference
 	@JsonIgnore
 	private List<TenderAttendee> allTenderAttendees;
-
 	@ManyToMany(cascade = {CascadeType.ALL})
 	@JoinTable(
 			name = "User_Tender",
@@ -49,7 +59,7 @@ public class TenderDao {
 		TenderResponseDto dto = new TenderResponseDto();
 		dto.setDescription(this.getDescription());
 		dto.setDistance(this.getDistance());
-		dto.setName(this.getName());
+		dto.setTitle(this.getTitle());
 		dto.setPricePerUnit(this.getPricePerUnit());
 		dto.setUnit(this.getUnit());
 		dto.setOwnerName(this.getOwner().getName());
@@ -57,6 +67,9 @@ public class TenderDao {
 		dto.setAcceptedUserIds(this.getAcceptedUserIds());
 		dto.setGatheredGrossMass(this.getGatheredGrossMass());
 		dto.setNeededGrossMass(this.getNeededGrossMass());
+		dto.setActive(this.getActive());
+		dto.setStartDate(this.getStartDate());
+		dto.setEndDate(this.getEndDate());
 		return dto;
 	}
 }
