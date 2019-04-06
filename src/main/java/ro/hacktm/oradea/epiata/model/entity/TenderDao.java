@@ -1,6 +1,7 @@
 package ro.hacktm.oradea.epiata.model.entity;
 
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import ro.hacktm.oradea.epiata.model.dto.TenderDto;
 
 import javax.persistence.*;
@@ -10,12 +11,15 @@ import java.util.stream.Collectors;
 @Entity
 @Table(name = "TENDER")
 @Data
+@NoArgsConstructor
 public class TenderDao {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
 	private String name;
+	@OneToMany(cascade = {CascadeType.ALL})
+	private List<AcceptedUser> acceptedUserIds;
 	private String description;
 	private String unit;
 	@Column(name = "price_unit")
@@ -23,6 +27,7 @@ public class TenderDao {
 	private String distance;
 	private String owner;
 	private boolean status;
+
 	@ManyToMany(cascade = {CascadeType.ALL})
 	@JoinTable(
 			name = "User_Tender",

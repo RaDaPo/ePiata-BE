@@ -15,4 +15,5 @@ public class TenderDto {
 	private boolean status;
 	private Long userId;
 	private List<UserDto> users;
+	private List<Integer> acceptedUserIds;
 }
