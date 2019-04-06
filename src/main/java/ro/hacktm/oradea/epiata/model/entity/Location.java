@@ -8,10 +8,12 @@ import javax.persistence.Embeddable;
 @Data
 public class Location {
 
-	String address;
+	String city;
+	String county;
+	String street;
 	Integer streetNo;
 	String latitude;
 	String longitude;
-	String county;
+	String zip;
 
 }
