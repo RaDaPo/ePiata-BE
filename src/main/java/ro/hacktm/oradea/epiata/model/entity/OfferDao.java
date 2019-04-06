@@ -20,7 +20,8 @@ public class OfferDao {
 	private String quantity;
 	private String price;
 	private Long category;
-
+	@Embedded
+	private Location location;
 	@Column(name = "start_date")
 	@Temporal(TemporalType.DATE)
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
