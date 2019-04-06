@@ -17,6 +17,8 @@ public class TenderAttendee {
 
 	private Long userId;
 	private Integer participationMass;
+	private String name;
 	private Boolean accepted = false;
+	private Boolean rejected = false;
 
 }

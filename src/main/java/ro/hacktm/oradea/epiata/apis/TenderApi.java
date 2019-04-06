@@ -2,10 +2,7 @@ package ro.hacktm.oradea.epiata.apis;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
-import ro.hacktm.oradea.epiata.model.dto.TenderAcceptUser;
-import ro.hacktm.oradea.epiata.model.dto.TenderAddUsersRequestDto;
-import ro.hacktm.oradea.epiata.model.dto.TenderRequestDto;
-import ro.hacktm.oradea.epiata.model.dto.TenderResponseDto;
+import ro.hacktm.oradea.epiata.model.dto.*;
 import ro.hacktm.oradea.epiata.model.entity.TenderDao;
 
 import java.util.List;
@@ -18,7 +15,7 @@ public interface TenderApi {
 	List<TenderResponseDto> getAllUsers();
 
 	@PostMapping
-	TenderResponseDto addTender(@RequestBody TenderRequestDto tenderRequestDto);
+	TenderResponseDto addTender(@RequestBody TenderAddRequest tenderRequestDto);
 
 	@PutMapping
 	TenderDao addUsersToTender(@RequestBody TenderAddUsersRequestDto tenderRequestDto);

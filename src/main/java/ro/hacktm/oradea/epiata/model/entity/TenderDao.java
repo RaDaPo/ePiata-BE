@@ -6,6 +6,7 @@ import lombok.Data;
 import ro.hacktm.oradea.epiata.model.dto.TenderResponseDto;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -35,7 +36,7 @@ public class TenderDao {
 	@OneToMany(cascade = {CascadeType.ALL})
 	@JsonManagedReference
 	@JsonIgnore
-	private List<TenderAttendee> tenderAttendees;
+	private List<TenderAttendee> allTenderAttendees;
 
 	@ManyToMany(cascade = {CascadeType.ALL})
 	@JoinTable(
@@ -43,7 +44,7 @@ public class TenderDao {
 			joinColumns = {@JoinColumn(name = "user_id")},
 			inverseJoinColumns = {@JoinColumn(name = "tender_id")}
 	)
-	private List<UserDao> users;
+	private List<UserDao> acceptedUsers = new ArrayList<>();
 
 	public TenderResponseDto toDto() {
 		TenderResponseDto dto = new TenderResponseDto();
@@ -53,8 +54,7 @@ public class TenderDao {
 		dto.setPricePerUnit(this.getPricePerUnit());
 		dto.setUnit(this.getUnit());
 		dto.setOwnerName(this.getOwner().getName());
-		dto.setUsers(this.getUsers().stream().map(UserDao::getName).collect(Collectors.toList()));
-		dto.setTenderAttendees(this.getTenderAttendees());
+		dto.setAllTenderAttendees(this.getAllTenderAttendees());
 		dto.setAcceptedUserIds(this.getAcceptedUserIds());
 		dto.setGatheredGrossMass(this.getGatheredGrossMass());
 		dto.setNeededGrossMass(this.getNeededGrossMass());

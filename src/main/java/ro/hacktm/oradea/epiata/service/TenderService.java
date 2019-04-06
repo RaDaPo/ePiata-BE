@@ -5,8 +5,8 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ro.hacktm.oradea.epiata.model.dto.TenderAcceptUser;
+import ro.hacktm.oradea.epiata.model.dto.TenderAddRequest;
 import ro.hacktm.oradea.epiata.model.dto.TenderAddUsersRequestDto;
-import ro.hacktm.oradea.epiata.model.dto.TenderRequestDto;
 import ro.hacktm.oradea.epiata.model.dto.TenderResponseDto;
 import ro.hacktm.oradea.epiata.model.entity.AcceptedUser;
 import ro.hacktm.oradea.epiata.model.entity.TenderAttendee;
@@ -33,7 +33,7 @@ public class TenderService {
 		return entity.stream().map(TenderDao::toDto).collect(Collectors.toList());
 	}
 
-	public TenderResponseDto addNewTender(TenderRequestDto tenderRequestDto) {
+	public TenderResponseDto addNewTender(TenderAddRequest tenderRequestDto) {
 		TenderDao tender = new TenderDao();
 		BeanUtils.copyProperties(tenderRequestDto, tender);
 		Optional<UserDao> owner = userService.getUserById(tenderRequestDto.getOwnerId());
@@ -47,12 +47,12 @@ public class TenderService {
 		if (tender.isPresent() && (tender.get().getNeededGrossMass() - tender.get().getGatheredGrossMass()) > tenderRequestDto.getParticipationMass()) {
 			Optional<UserDao> user = userService.getUserById(tenderRequestDto.getUserId());
 			if (user.isPresent()) {
-				tender.get().getUsers().add(user.get());
 				tender.get().setGatheredGrossMass(tender.get().getGatheredGrossMass() + tenderRequestDto.getParticipationMass());
 				TenderAttendee tenderAttendee = new TenderAttendee();
 				tenderAttendee.setUserId(user.get().getId());
 				tenderAttendee.setParticipationMass(tenderRequestDto.getParticipationMass());
-				tender.get().getTenderAttendees().add(tenderAttendee);
+				tenderAttendee.setName(user.get().getName());
+				tender.get().getAllTenderAttendees().add(tenderAttendee);
 				save(tender.get());
 			}
 		}
@@ -61,38 +61,45 @@ public class TenderService {
 
 	public void acceptAttendeeToTender(TenderAcceptUser acceptUser) {
 		Optional<TenderDao> tender = getTenderById(acceptUser.getTenderId());
-		if (tender.isPresent()) {
+		Optional<UserDao> user = userService.getUserById(acceptUser.getUserId());
+		if (tender.isPresent() && user.isPresent()) {
 			if (tender.get().getAcceptedUserIds() != null) {
-				AcceptedUser acceptedUser = new AcceptedUser();
-				acceptedUser.setUserId(acceptUser.getUserId());
-				tender.get().getAcceptedUserIds().add(acceptedUser);
 				TenderAttendee tenderAttendee = tenderAttendeesRepository.findByUserId(acceptUser.getUserId());
-				tenderAttendee.setAccepted(true);
-				tenderAttendeesRepository.save(tenderAttendee);
-				tender.get().setGatheredGrossMass(tender.get().getGatheredGrossMass() + tenderAttendee.getParticipationMass());
-				save(tender.get());
+				if (!tenderAttendee.getRejected().equals(true)) {
+					AcceptedUser acceptedUser = new AcceptedUser();
+					acceptedUser.setUserId(acceptUser.getUserId());
+					tender.get().getAcceptedUserIds().add(acceptedUser);
+					processAndSaveAttendee(tender.get(), user.get(), tenderAttendee, acceptedUser);
+				}
 			} else {
-				AcceptedUser acceptedUser = new AcceptedUser();
-				acceptedUser.setUserId(acceptUser.getUserId());
-				tender.get().setAcceptedUserIds(Collections.singletonList(acceptedUser));
 				TenderAttendee tenderAttendee = tenderAttendeesRepository.findByUserId(acceptUser.getUserId());
-				tenderAttendee.setAccepted(true);
-				tenderAttendeesRepository.save(tenderAttendee);
-				tender.get().setGatheredGrossMass(tender.get().getGatheredGrossMass() + tenderAttendee.getParticipationMass());
-				save(tender.get());
+				if (!tenderAttendee.getRejected().equals(true)) {
+					AcceptedUser acceptedUser = new AcceptedUser();
+					acceptedUser.setUserId(acceptUser.getUserId());
+					tender.get().setAcceptedUserIds(Collections.singletonList(acceptedUser));
+					processAndSaveAttendee(tender.get(), user.get(), tenderAttendee, acceptedUser);
+				}
 			}
 		}
 	}
 
+	private void processAndSaveAttendee(TenderDao tender, UserDao user, TenderAttendee tenderAttendee, AcceptedUser acceptedUser) {
+		tenderAttendee.setAccepted(true);
+		tenderAttendeesRepository.save(tenderAttendee);
+		tender.setGatheredGrossMass(tender.getGatheredGrossMass() + tenderAttendee.getParticipationMass());
+		acceptedUser.setName(user.getName());
+		tender.getAcceptedUsers().add(user);
+		save(tender);
+	}
+
 	public void declineAttendeeFromTender(TenderAcceptUser acceptUser) {
 		Optional<TenderDao> tender = getTenderById(acceptUser.getTenderId());
-		if (tender.isPresent()) {
+		if (tender.isPresent() && tender.get().getAcceptedUserIds().stream().noneMatch(x -> x.getUserId().equals(acceptUser.getUserId()))) {
 			TenderAttendee tenderAttendee = tenderAttendeesRepository.findByUserId(acceptUser.getUserId());
-			tenderAttendee.setAccepted(true);
-			tender.get().getTenderAttendees().remove(tenderAttendee);
+			tenderAttendee.setAccepted(false);
+			tenderAttendee.setRejected(true);
 			Optional<UserDao> userDao = userService.getUserById(acceptUser.getUserId());
-			userDao.ifPresent(dao -> tender.get().getUsers().remove(dao));
-			tenderAttendeesRepository.delete(tenderAttendee);
+			userDao.ifPresent(dao -> tender.get().getAcceptedUsers().remove(dao));
 			save(tender.get());
 		}
 	}

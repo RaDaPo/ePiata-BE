@@ -22,7 +22,7 @@ public class UserDao {
 
 	private String name;
 	private String email;
-	@ManyToMany(mappedBy = "users")
+	@ManyToMany(mappedBy = "acceptedUsers")
 	@JsonIgnore
 	private List<TenderDao> tenders;
 	@OneToMany(mappedBy = "user")
