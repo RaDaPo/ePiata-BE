@@ -40,7 +40,7 @@ public class TenderService {
 		TenderDao tender = new TenderDao();
 		BeanUtils.copyProperties(tenderRequestDto, tender);
 		Optional<UserDao> owner = userService.getUserDaoById(tenderRequestDto.getOwnerId());
-		if(owner.isPresent()) {
+		if (owner.isPresent()) {
 			owner.ifPresent(userDao -> tender.setOwner(userDao.toOwnerDao()));
 			tender.setLocation(owner.get().getLocation());
 		}
@@ -51,7 +51,7 @@ public class TenderService {
 
 	public TenderDao addAttendeesToTender(TenderAddUsersRequestDto tenderRequestDto) {
 		Optional<TenderDao> tender = getTenderById(tenderRequestDto.getTenderId());
-		if(tender.isPresent()) {
+		if (tender.isPresent()) {
 			if (getNeededGrossMassPlusMarje(tender.get()) > tenderRequestDto.getParticipationMass()) {
 				Optional<UserDao> user = userService.getUserDaoById(tenderRequestDto.getUserId());
 				if (user.isPresent()) {
@@ -104,7 +104,8 @@ public class TenderService {
 		tender.setGatheredGrossMass(tender.getGatheredGrossMass() + tenderAttendee.getParticipationMass());
 		acceptedUser.setName(user.getName());
 		tender.getAcceptedUsers().add(user);
-		if( tender.getGatheredGrossMass() >= tender.getNeededGrossMass() || tender.getGatheredGrossMass() < (tender.getNeededGrossMass() + tender.getNeededGrossMass() / 5 ) ) {
+		if (tender.getGatheredGrossMass() >= tender.getNeededGrossMass() ||
+				tender.getGatheredGrossMass() < (tender.getNeededGrossMass() + tender.getNeededGrossMass() / 5)) {
 			tender.setStatus(false);
 			tender.setActive(false);
 		}

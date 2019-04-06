@@ -7,6 +7,6 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 public class TenderNotFoundException extends RuntimeException {
 
 	public TenderNotFoundException(Long id) {
-		super("Tender with the id of: " + id +" was not found");
+		super("Tender with the id of: " + id + " was not found");
 	}
 }

@@ -12,6 +12,8 @@ import java.util.Date;
 @Data
 public class OfferDto {
 
+	@Embedded
+	Location location;
 	private Long id;
 	private String name;
 	private Long owner;
@@ -19,12 +21,7 @@ public class OfferDto {
 	private String price;
 	private String description;
 	private Boolean active;
-
 	private Long category;
-
-	@Embedded
-	Location location;
-
 	@Temporal(TemporalType.DATE)
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
 	private Date startDate;

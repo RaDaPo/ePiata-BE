@@ -5,7 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
 import ro.hacktm.oradea.epiata.api.OfferApi;
-import ro.hacktm.oradea.epiata.model.dto.GetAllOffersRequest;
+import ro.hacktm.oradea.epiata.model.dto.FilteredOffersRequest;
 import ro.hacktm.oradea.epiata.model.dto.OfferDto;
 import ro.hacktm.oradea.epiata.service.OfferService;
 
@@ -21,7 +21,7 @@ public class OfferController implements OfferApi {
 		return getResponseEntityOk(service.getAllOffers());
 	}
 
-	public ResponseEntity getAllFilteredOffers(GetAllOffersRequest request) {
+	public ResponseEntity getAllFilteredOffers(FilteredOffersRequest request) {
 		return getResponseEntityOk(service.getAllOffers(request));
 	}
 
