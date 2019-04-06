@@ -25,4 +25,8 @@ public interface TenderApi {
 	@PutMapping(value = "/accept")
 	@ResponseStatus(value = HttpStatus.NO_CONTENT)
 	void acceptUser(@RequestBody TenderAcceptUser acceptUser);
+
+	@PutMapping(value = "/decline")
+	@ResponseStatus(value = HttpStatus.NO_CONTENT)
+	void declineUser(@RequestBody TenderAcceptUser acceptUser);
 }

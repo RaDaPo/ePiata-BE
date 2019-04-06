@@ -1,6 +1,5 @@
 package ro.hacktm.oradea.epiata.model.entity;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.Data;
@@ -31,13 +30,12 @@ public class TenderDao {
 	private String pricePerUnit;
 	private String distance;
 	private Integer neededGrossMass = 0;
-	private Integer gatheredGrossMass= 0;
+	private Integer gatheredGrossMass = 0;
 	private boolean status;
 	@OneToMany(cascade = {CascadeType.ALL})
 	@JsonManagedReference
 	@JsonIgnore
 	private List<TenderAttendee> tenderAttendees;
-
 
 	@ManyToMany(cascade = {CascadeType.ALL})
 	@JoinTable(
@@ -58,6 +56,8 @@ public class TenderDao {
 		dto.setUsers(this.getUsers().stream().map(UserDao::getName).collect(Collectors.toList()));
 		dto.setTenderAttendees(this.getTenderAttendees());
 		dto.setAcceptedUserIds(this.getAcceptedUserIds());
+		dto.setGatheredGrossMass(this.getGatheredGrossMass());
+		dto.setNeededGrossMass(this.getNeededGrossMass());
 		return dto;
 	}
 }

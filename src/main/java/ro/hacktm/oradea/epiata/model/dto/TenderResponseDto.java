@@ -15,6 +15,8 @@ public class TenderResponseDto {
 	private String pricePerUnit;
 	private String distance;
 	private String ownerName;
+	private Integer neededGrossMass = 0;
+	private Integer gatheredGrossMass = 0;
 	private boolean status;
 	private List<String> users;
 	private List<TenderAttendee> tenderAttendees;

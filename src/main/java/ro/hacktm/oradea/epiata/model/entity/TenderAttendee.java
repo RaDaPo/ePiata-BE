@@ -1,10 +1,11 @@
 package ro.hacktm.oradea.epiata.model.entity;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 
-import javax.persistence.*;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 
 @Entity
 @Data
@@ -16,7 +17,6 @@ public class TenderAttendee {
 
 	private Long userId;
 	private Integer participationMass;
-	private Boolean accepted;
-
+	private Boolean accepted = false;
 
 }

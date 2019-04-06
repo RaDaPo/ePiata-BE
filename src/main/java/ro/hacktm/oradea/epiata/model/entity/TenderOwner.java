@@ -23,5 +23,4 @@ public class TenderOwner {
 	@JsonBackReference
 	private TenderDao tenderDao;
 
-
 }

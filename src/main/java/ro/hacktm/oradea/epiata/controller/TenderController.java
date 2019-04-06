@@ -15,7 +15,6 @@ import ro.hacktm.oradea.epiata.model.entity.TenderDao;
 import ro.hacktm.oradea.epiata.model.entity.UserDao;
 import ro.hacktm.oradea.epiata.repository.AcceptedUserRepository;
 import ro.hacktm.oradea.epiata.repository.TenderAttendeesRepository;
-import ro.hacktm.oradea.epiata.repository.TenderRepository;
 import ro.hacktm.oradea.epiata.service.TenderService;
 import ro.hacktm.oradea.epiata.service.UserService;
 
@@ -30,8 +29,7 @@ public class TenderController implements TenderApi {
 	private final TenderService tenderService;
 	private final UserService userService;
 	private final AcceptedUserRepository acceptedUserRepository;
-	private final TenderAttendeesRepository tenderRepository;
-
+	private final TenderAttendeesRepository tenderAttendeesRepository;
 
 	public List<TenderResponseDto> getAllUsers() {
 		return tenderService.getAllTenders();
@@ -49,16 +47,16 @@ public class TenderController implements TenderApi {
 	public TenderDao addUsersToTender(TenderAddUsersRequestDto tenderRequestDto) {
 		Optional<TenderDao> tender = tenderService.getTenderById(tenderRequestDto.getTenderId());
 		if (tender.isPresent() && (tender.get().getNeededGrossMass() - tender.get().getGatheredGrossMass()) > tenderRequestDto.getParticipationMass()) {
-				Optional<UserDao> user = userService.getUserById(tenderRequestDto.getUserId());
-				if(user.isPresent()) {
-					tender.get().getUsers().add(user.get());
-					tender.get().setGatheredGrossMass(tender.get().getGatheredGrossMass() + tenderRequestDto.getParticipationMass());
-					TenderAttendee tenderAttendee = new TenderAttendee();
-					tenderAttendee.setUserId(user.get().getId());
-					tenderAttendee.setParticipationMass(tenderRequestDto.getParticipationMass());
-					tender.get().getTenderAttendees().add(tenderAttendee);
-					tenderService.save(tender.get());
-				}
+			Optional<UserDao> user = userService.getUserById(tenderRequestDto.getUserId());
+			if (user.isPresent()) {
+				tender.get().getUsers().add(user.get());
+				tender.get().setGatheredGrossMass(tender.get().getGatheredGrossMass() + tenderRequestDto.getParticipationMass());
+				TenderAttendee tenderAttendee = new TenderAttendee();
+				tenderAttendee.setUserId(user.get().getId());
+				tenderAttendee.setParticipationMass(tenderRequestDto.getParticipationMass());
+				tender.get().getTenderAttendees().add(tenderAttendee);
+				tenderService.save(tender.get());
+			}
 		}
 		return tender.orElseThrow(RuntimeException::new);
 	}
@@ -70,17 +68,33 @@ public class TenderController implements TenderApi {
 				AcceptedUser acceptedUser = new AcceptedUser();
 				acceptedUser.setUserId(acceptUser.getUserId());
 				tender.get().getAcceptedUserIds().add(acceptedUser);
-				TenderAttendee tenderAttendee = tenderRepository.findByUserId(acceptUser.getUserId());
+				TenderAttendee tenderAttendee = tenderAttendeesRepository.findByUserId(acceptUser.getUserId());
 				tenderAttendee.setAccepted(true);
-				tenderRepository.save(tenderAttendee);
+				tenderAttendeesRepository.save(tenderAttendee);
+				tender.get().setGatheredGrossMass(tender.get().getGatheredGrossMass() + tenderAttendee.getParticipationMass());
+				tenderService.save(tender.get());
 			} else {
 				AcceptedUser acceptedUser = new AcceptedUser();
 				acceptedUser.setUserId(acceptUser.getUserId());
 				tender.get().setAcceptedUserIds(Collections.singletonList(acceptedUser));
-				TenderAttendee tenderAttendee = tenderRepository.findByUserId(acceptUser.getUserId());
+				TenderAttendee tenderAttendee = tenderAttendeesRepository.findByUserId(acceptUser.getUserId());
 				tenderAttendee.setAccepted(true);
-				tenderRepository.save(tenderAttendee);
+				tenderAttendeesRepository.save(tenderAttendee);
+				tender.get().setGatheredGrossMass(tender.get().getGatheredGrossMass() + tenderAttendee.getParticipationMass());
+				tenderService.save(tender.get());
 			}
+			tenderService.save(tender.get());
+		}
+	}
+
+	public void declineUser(TenderAcceptUser acceptUser) {
+		Optional<TenderDao> tender = tenderService.getTenderById(acceptUser.getTenderId());
+		if (tender.isPresent()) {
+			TenderAttendee tenderAttendee = tenderAttendeesRepository.findByUserId(acceptUser.getUserId());
+			tenderAttendee.setAccepted(true);
+			tender.get().getTenderAttendees().remove(tenderAttendee);
+			tender.get().getUsers().remove(userService.getUserById(acceptUser.getUserId()).get());
+			tenderAttendeesRepository.delete(tenderAttendee);
 			tenderService.save(tender.get());
 		}
 	}

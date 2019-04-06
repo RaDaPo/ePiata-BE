@@ -4,8 +4,8 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 
 @Data
-public class LocationResponse {
+public class GeoCodeResponse {
 
-	@JsonProperty("DisplayPosition")
-	private DisplayLocationDto displayLocation;
+	@JsonProperty(value = "Response")
+	private GeoCodeResponseContent geoCodeResponseContent;
 }
