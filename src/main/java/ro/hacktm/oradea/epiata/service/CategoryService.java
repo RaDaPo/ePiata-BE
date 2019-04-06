@@ -44,4 +44,14 @@ public class CategoryService {
 				.map(Category::toDto)
 				.collect(Collectors.toList());
 	}
+
+	CategoryDto getCategoryByName(String name) {
+
+		Optional<Category> category = categoryRepository.findByName(name);
+
+		if (category.isPresent())
+			return category.get().toDto();
+
+		throw new CategoryNotFoundException(name);
+	}
 }

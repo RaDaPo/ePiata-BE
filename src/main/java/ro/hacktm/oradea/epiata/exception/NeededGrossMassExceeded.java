@@ -7,6 +7,6 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 public class NeededGrossMassExceeded extends RuntimeException {
 
 	public NeededGrossMassExceeded(Integer mass) {
-		super("Remaining need for this tender is maximum: " + mass +"kg");
+		super("Remaining need for this tender is maximum: " + mass + "kg");
 	}
 }
