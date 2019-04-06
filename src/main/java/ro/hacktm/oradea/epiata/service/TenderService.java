@@ -105,7 +105,6 @@ public class TenderService {
 		acceptedUser.setName(user.getName());
 		tender.getAcceptedUsers().add(user);
 		if( tender.getGatheredGrossMass() >= tender.getNeededGrossMass() || tender.getGatheredGrossMass() < (tender.getNeededGrossMass() + tender.getNeededGrossMass() / 5 ) ) {
-			tender.setStatus(false);
 			tender.setActive(false);
 		}
 		save(tender);
@@ -137,5 +136,10 @@ public class TenderService {
 
 	public List<TenderDao> findByCategoryTypeAndCounty(TenderFilteredRequestDto requestDto) {
 		return repository.findByTypeOrLocation_CountyAndActiveTrue(requestDto.getCategoryType(), requestDto.getCounty());
+	}
+
+	public void findTenderByIdAndCloseIt(TenderCloseRequestDto requestDto) {
+		Optional<TenderDao> tender = repository.findById(requestDto.getTenderId());
+		tender.ifPresent(tenderDao -> tenderDao.setActive(false));
 	}
 }

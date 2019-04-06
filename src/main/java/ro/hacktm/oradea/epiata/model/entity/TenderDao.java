@@ -24,7 +24,6 @@ public class TenderDao {
 	private Double pricePerUnit;
 	private Integer neededGrossMass = 0;
 	private Integer gatheredGrossMass = 0;
-	private boolean status = true;
 	private String description;
 	private Boolean active = true;
 	@Temporal(TemporalType.DATE)

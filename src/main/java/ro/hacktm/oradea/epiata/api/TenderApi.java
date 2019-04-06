@@ -3,10 +3,7 @@ package ro.hacktm.oradea.epiata.api;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import ro.hacktm.oradea.epiata.model.dto.TenderAcceptUser;
-import ro.hacktm.oradea.epiata.model.dto.TenderAddRequest;
-import ro.hacktm.oradea.epiata.model.dto.TenderAddUsersRequestDto;
-import ro.hacktm.oradea.epiata.model.dto.TenderFilteredRequestDto;
+import ro.hacktm.oradea.epiata.model.dto.*;
 
 @CrossOrigin
 @RequestMapping(path = "/api/tenders")
@@ -34,4 +31,8 @@ public interface TenderApi {
 
 	@PostMapping(value = "/search/by-category")
 	ResponseEntity findAllByActiveTrueAndCountyAndCategory(@RequestBody TenderFilteredRequestDto requestDto);
+
+	@PostMapping(value = "/close")
+	@ResponseStatus(value = HttpStatus.NO_CONTENT)
+	void closetTender(TenderCloseRequestDto requestDto);
 }

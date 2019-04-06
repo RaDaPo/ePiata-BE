@@ -5,10 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
 import ro.hacktm.oradea.epiata.api.TenderApi;
-import ro.hacktm.oradea.epiata.model.dto.TenderAcceptUser;
-import ro.hacktm.oradea.epiata.model.dto.TenderAddRequest;
-import ro.hacktm.oradea.epiata.model.dto.TenderAddUsersRequestDto;
-import ro.hacktm.oradea.epiata.model.dto.TenderFilteredRequestDto;
+import ro.hacktm.oradea.epiata.model.dto.*;
 import ro.hacktm.oradea.epiata.repository.TenderAttendeesRepository;
 import ro.hacktm.oradea.epiata.service.TenderService;
 import ro.hacktm.oradea.epiata.service.UserService;
@@ -51,6 +48,10 @@ public class TenderController implements TenderApi {
 
 	public ResponseEntity findAllByActiveTrueAndCountyAndCategory(TenderFilteredRequestDto requestDto) {
 		return getResponseEntityOk(tenderService.findByCategoryTypeAndCounty(requestDto));
+	}
+
+	public void closetTender(TenderCloseRequestDto requestDto) {
+		tenderService.findTenderByIdAndCloseIt(requestDto);
 	}
 
 }

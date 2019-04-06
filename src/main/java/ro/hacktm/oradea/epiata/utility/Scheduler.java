@@ -3,6 +3,7 @@ package ro.hacktm.oradea.epiata.utility;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import ro.hacktm.oradea.epiata.model.entity.Offer;
 import ro.hacktm.oradea.epiata.model.entity.TenderDao;
@@ -20,7 +21,7 @@ public class Scheduler {
 	private final TenderRepository tenderRepository;
 
 	//	@Scheduled(cron = "0 0 9 1 * ?")
-//	@Scheduled(fixedDelay = 10000)
+	@Scheduled(fixedDelay = 10000)
 	private void create() {
 		validateOffer();
 	}
@@ -48,7 +49,6 @@ public class Scheduler {
 	private void validateTenderDates(TenderDao offerDao) {
 		if (offerDao.getEndDate().compareTo(new Date()) < 0) {
 			offerDao.setActive(false);
-			offerDao.setStatus(false);
 			tenderRepository.save(offerDao);
 		}
 	}
