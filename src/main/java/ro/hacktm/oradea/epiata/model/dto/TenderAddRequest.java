@@ -2,8 +2,6 @@ package ro.hacktm.oradea.epiata.model.dto;
 
 import lombok.Data;
 
-import java.util.List;
-
 @Data
 public class TenderAddRequest {
 

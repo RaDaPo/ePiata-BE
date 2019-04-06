@@ -2,36 +2,40 @@ package ro.hacktm.oradea.epiata.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
-import ro.hacktm.oradea.epiata.apis.OfferApi;
+import ro.hacktm.oradea.epiata.api.OfferApi;
 import ro.hacktm.oradea.epiata.model.dto.OfferDto;
 import ro.hacktm.oradea.epiata.service.OfferService;
 
-import java.util.List;
+import static ro.hacktm.oradea.epiata.utility.Utility.getResponseEntityOk;
 
 @RestController
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
 public class OfferController implements OfferApi {
 
-    private final OfferService service;
+	private final OfferService service;
 
-    public List<OfferDto> getAllOffers() {
-        return service.getAllOffers();
-    }
+	public ResponseEntity getAllOffers() {
+		return getResponseEntityOk(service.getAllOffers());
+	}
 
-    public OfferDto getOffer(Long id) {
-        return service.getOffer(id);
-    }
+	public ResponseEntity getOffer(Long id) {
+		return getResponseEntityOk(service.getOffer(id));
+	}
 
-    public void deleteOffer(Long id) {
-        service.deleteOffer(id);
-    }
+	public ResponseEntity deleteOffer(Long id) {
+		service.deleteOffer(id);
+		return getResponseEntityOk();
+	}
 
-    public void updateOffer(OfferDto dto) {
-        service.updateOffer(dto);
-    }
+	public ResponseEntity updateOffer(OfferDto dto) {
+		service.updateOffer(dto);
+		return getResponseEntityOk();
+	}
 
-    public void createOffer(OfferDto dto) {
-        service.createOffer(dto);
-    }
+	public ResponseEntity createOffer(OfferDto dto) {
+		service.createOffer(dto);
+		return getResponseEntityOk();
+	}
 }

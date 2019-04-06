@@ -2,12 +2,13 @@ package ro.hacktm.oradea.epiata.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
-import ro.hacktm.oradea.epiata.apis.UsersApi;
+import ro.hacktm.oradea.epiata.api.UsersApi;
 import ro.hacktm.oradea.epiata.model.dto.UserDto;
 import ro.hacktm.oradea.epiata.service.UserService;
 
-import java.util.List;
+import static ro.hacktm.oradea.epiata.utility.Utility.getResponseEntityOk;
 
 @RestController
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
@@ -15,23 +16,26 @@ public class UserController implements UsersApi {
 
 	private final UserService userService;
 
-	public List<UserDto> getAllUsers() {
-		return userService.getAllUsers();
+	public ResponseEntity getAllUsers() {
+		return getResponseEntityOk(userService.getAllUsers());
 	}
 
-	public UserDto getUser(Long userId) {
-		return userService.getUser(userId);
+	public ResponseEntity getUser(Long id) {
+		return getResponseEntityOk(userService.getUserById(id));
 	}
 
-	public void createUser(UserDto userDto) {
+	public ResponseEntity createUser(UserDto userDto) {
 		userService.createUser(userDto);
+		return getResponseEntityOk();
 	}
 
-	public void updateUser(UserDto dto) {
+	public ResponseEntity updateUser(UserDto dto) {
 		userService.updateUser(dto);
+		return getResponseEntityOk();
 	}
 
-	public void deleteUser(Long id) {
+	public ResponseEntity deleteUser(Long id) {
 		userService.deleteUser(id);
+		return getResponseEntityOk();
 	}
 }

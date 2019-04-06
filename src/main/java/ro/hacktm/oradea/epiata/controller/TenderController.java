@@ -2,15 +2,17 @@ package ro.hacktm.oradea.epiata.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
-import ro.hacktm.oradea.epiata.apis.TenderApi;
-import ro.hacktm.oradea.epiata.model.dto.*;
-import ro.hacktm.oradea.epiata.model.entity.TenderDao;
+import ro.hacktm.oradea.epiata.api.TenderApi;
+import ro.hacktm.oradea.epiata.model.dto.TenderAcceptUser;
+import ro.hacktm.oradea.epiata.model.dto.TenderAddRequest;
+import ro.hacktm.oradea.epiata.model.dto.TenderAddUsersRequestDto;
 import ro.hacktm.oradea.epiata.repository.TenderAttendeesRepository;
 import ro.hacktm.oradea.epiata.service.TenderService;
 import ro.hacktm.oradea.epiata.service.UserService;
 
-import java.util.List;
+import static ro.hacktm.oradea.epiata.utility.Utility.getResponseEntityOk;
 
 @RestController
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
@@ -20,28 +22,30 @@ public class TenderController implements TenderApi {
 	private final UserService userService;
 	private final TenderAttendeesRepository tenderAttendeesRepository;
 
-	public List<TenderResponseDto> getAllUsers() {
-		return tenderService.getAllTenders();
+	public ResponseEntity getAllUsers() {
+		return getResponseEntityOk(tenderService.getAllTenders());
 	}
 
-	public TenderResponseDto addTender(TenderAddRequest tenderRequestDto) {
-		return tenderService.addNewTender(tenderRequestDto);
+	public ResponseEntity addTender(TenderAddRequest tenderRequestDto) {
+		return getResponseEntityOk(tenderService.addNewTender(tenderRequestDto));
 	}
 
-	public TenderDao addUsersToTender(TenderAddUsersRequestDto tenderRequestDto) {
-		return tenderService.addAttendeesToTender(tenderRequestDto);
+	public ResponseEntity addUsersToTender(TenderAddUsersRequestDto tenderRequestDto) {
+		return getResponseEntityOk(tenderService.addAttendeesToTender(tenderRequestDto));
 	}
 
-	public void acceptUser(TenderAcceptUser acceptUser) {
+	public ResponseEntity acceptUser(TenderAcceptUser acceptUser) {
 		tenderService.acceptAttendeeToTender(acceptUser);
+		return getResponseEntityOk();
 	}
 
-	public void declineUser(TenderAcceptUser acceptUser) {
+	public ResponseEntity declineUser(TenderAcceptUser acceptUser) {
 		tenderService.declineAttendeeFromTender(acceptUser);
+		return getResponseEntityOk();
 	}
 
-	public List<TenderDao> findTendersByDescriptionContaining(String searchPhrase) {
-		return tenderService.findByDescriptionContaining(searchPhrase);
+	public ResponseEntity findTendersByDescriptionContaining(String searchPhrase) {
+		return getResponseEntityOk(tenderService.findByDescriptionContaining(searchPhrase));
 	}
 
 }

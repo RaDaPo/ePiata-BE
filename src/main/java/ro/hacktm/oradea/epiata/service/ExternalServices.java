@@ -3,7 +3,7 @@ package ro.hacktm.oradea.epiata.service;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
-import ro.hacktm.oradea.epiata.exceptions.ExternalServicesException;
+import ro.hacktm.oradea.epiata.exception.ExternalServicesException;
 import ro.hacktm.oradea.epiata.model.external_services.DisplayLocationDto;
 import ro.hacktm.oradea.epiata.model.external_services.DistanceContent;
 import ro.hacktm.oradea.epiata.model.external_services.DistanceDto;

@@ -3,13 +3,14 @@ package ro.hacktm.oradea.epiata.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import ro.hacktm.oradea.epiata.exceptions.CategoryNotFoundException;
+import ro.hacktm.oradea.epiata.exception.CategoryNotFoundException;
 import ro.hacktm.oradea.epiata.model.dto.CategoryDto;
 import ro.hacktm.oradea.epiata.model.entity.CategoryDao;
-import ro.hacktm.oradea.epiata.model.entity.enums.CategoryType;
+import ro.hacktm.oradea.epiata.model.entity.CategoryType;
 import ro.hacktm.oradea.epiata.repository.CategoryRepository;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -22,6 +23,7 @@ public class CategoryService {
 	public List<CategoryDto> getAllCategories() {
 		return categoryRepository.findAll()
 				.stream()
+				.filter(Objects::nonNull)
 				.map(CategoryDao::toDto)
 				.collect(Collectors.toList());
 	}
@@ -38,6 +40,7 @@ public class CategoryService {
 	public List<CategoryDto> getCategoriesByType(CategoryType type) {
 		return categoryRepository.findAllByType(type)
 				.stream()
+				.filter(Objects::nonNull)
 				.map(CategoryDao::toDto)
 				.collect(Collectors.toList());
 	}

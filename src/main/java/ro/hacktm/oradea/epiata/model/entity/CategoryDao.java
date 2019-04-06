@@ -2,7 +2,6 @@ package ro.hacktm.oradea.epiata.model.entity;
 
 import lombok.Data;
 import ro.hacktm.oradea.epiata.model.dto.CategoryDto;
-import ro.hacktm.oradea.epiata.model.entity.enums.CategoryType;
 
 import javax.persistence.*;
 
