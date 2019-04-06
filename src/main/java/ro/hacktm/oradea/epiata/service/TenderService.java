@@ -15,18 +15,18 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
 public class TenderService {
 
-	private final TenderRepository repository;
+    private final TenderRepository repository;
 
-	public List<TenderDto> getAllTenders() {
-		List<TenderDao> entity = repository.findAll();
-		return entity.stream().map(TenderDao::toDto).collect(Collectors.toList());
-	}
+    public List<TenderDto> getAllTenders() {
+        List<TenderDao> entity = repository.findAll();
+        return entity.stream().map(TenderDao::toDto).collect(Collectors.toList());
+    }
 
-	public void save(TenderDao tender) {
-		repository.save(tender);
-	}
+    public void save(TenderDao tender) {
+        repository.save(tender);
+    }
 
-	public Optional<TenderDao> getTenderById(Long id) {
-		return repository.findById(id);
-	}
+    public Optional<TenderDao> getTenderById(Long id) {
+        return repository.findById(id);
+    }
 }

@@ -11,9 +11,9 @@ import javax.persistence.Id;
 @Data
 public class AcceptedUser {
 
-	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
-	private Long id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Long id;
 
-	private Long userId;
+    private Long userId;
 }

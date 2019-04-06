@@ -13,25 +13,25 @@ import java.util.List;
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
 public class UserController implements UsersApi {
 
-	private final UserService userService;
+    private final UserService userService;
 
-	public List<UserDto> getAllUsers() {
-		return userService.getAllUsers();
-	}
+    public List<UserDto> getAllUsers() {
+        return userService.getAllUsers();
+    }
 
-	public UserDto getUser(Long userId) {
-		return userService.getUser(userId);
-	}
+    public UserDto getUser(Long userId) {
+        return userService.getUser(userId);
+    }
 
-	public void createUser(UserDto userDto) {
-		userService.createUser(userDto);
-	}
+    public void createUser(UserDto userDto) {
+        userService.createUser(userDto);
+    }
 
-	public void updateUser(UserDto dto) {
-		userService.updateUser(dto);
-	}
+    public void updateUser(UserDto dto) {
+        userService.updateUser(dto);
+    }
 
-	public void deleteUser(Long id) {
-		userService.deleteUser(id);
-	}
+    public void deleteUser(Long id) {
+        userService.deleteUser(id);
+    }
 }

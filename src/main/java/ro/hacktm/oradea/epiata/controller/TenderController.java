@@ -12,49 +12,51 @@ import ro.hacktm.oradea.epiata.model.entity.UserDao;
 import ro.hacktm.oradea.epiata.service.TenderService;
 import ro.hacktm.oradea.epiata.service.UserService;
 
-import java.util.*;
+import java.util.Collections;
+import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
 public class TenderController implements TenderApi {
 
-	private final TenderService tenderService;
-	private final UserService userService;
+    private final TenderService tenderService;
+    private final UserService userService;
 
-	public List<TenderDto> getAllUsers() {
-		return tenderService.getAllTenders();
-	}
+    public List<TenderDto> getAllUsers() {
+        return tenderService.getAllTenders();
+    }
 
-	public TenderDao addTender(TenderDto tenderDto) {
-		TenderDao tender = new TenderDao();
-		BeanUtils.copyProperties(tenderDto, tender);
-		tenderService.save(tender);
-		return tender;
-	}
+    public TenderDao addTender(TenderDto tenderDto) {
+        TenderDao tender = new TenderDao();
+        BeanUtils.copyProperties(tenderDto, tender);
+        tenderService.save(tender);
+        return tender;
+    }
 
-	public TenderDao updateTender(TenderDto tenderDto, Long id) {
-		Optional<TenderDao> tender = tenderService.getTenderById(id);
-		if (tender.isPresent()) {
-			Optional<UserDao> user = userService.getUserById(tenderDto.getUserId());
-			user.ifPresent(value -> tender.get().getUsers().add(value));
-			tenderService.save(tender.get());
-		}
-		return tender.orElseThrow(RuntimeException::new);
-	}
+    public TenderDao updateTender(TenderDto tenderDto, Long id) {
+        Optional<TenderDao> tender = tenderService.getTenderById(id);
+        if (tender.isPresent()) {
+            Optional<UserDao> user = userService.getUserById(tenderDto.getUserId());
+            user.ifPresent(value -> tender.get().getUsers().add(value));
+            tenderService.save(tender.get());
+        }
+        return tender.orElseThrow(RuntimeException::new);
+    }
 
-	public void acceptUser(Long userId, Long id) {
-		Optional<TenderDao> tender = tenderService.getTenderById(id);
-		if (tender.isPresent()) {
-			if(tender.get().getAcceptedUserIds() != null) {
-				AcceptedUser acceptedUser = new AcceptedUser();
-				acceptedUser.setUserId(userId);
-				tender.get().getAcceptedUserIds().add(acceptedUser);
-			} else {
-				AcceptedUser acceptedUser = new AcceptedUser();
-				acceptedUser.setUserId(userId);
-				tender.get().setAcceptedUserIds(Collections.singletonList(acceptedUser));
-			}
-			tenderService.save(tender.get());
-		}
-	}
+    public void acceptUser(Long userId, Long id) {
+        Optional<TenderDao> tender = tenderService.getTenderById(id);
+        if (tender.isPresent()) {
+            if (tender.get().getAcceptedUserIds() != null) {
+                AcceptedUser acceptedUser = new AcceptedUser();
+                acceptedUser.setUserId(userId);
+                tender.get().getAcceptedUserIds().add(acceptedUser);
+            } else {
+                AcceptedUser acceptedUser = new AcceptedUser();
+                acceptedUser.setUserId(userId);
+                tender.get().setAcceptedUserIds(Collections.singletonList(acceptedUser));
+            }
+            tenderService.save(tender.get());
+        }
+    }
 }

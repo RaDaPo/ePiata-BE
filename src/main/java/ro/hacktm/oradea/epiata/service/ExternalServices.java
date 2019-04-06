@@ -3,11 +3,10 @@ package ro.hacktm.oradea.epiata.service;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
-import ro.hacktm.oradea.epiata.apis.ExternalServicesApi;
 import ro.hacktm.oradea.epiata.exceptions.ExternalServicesException;
 import ro.hacktm.oradea.epiata.model.external_services.DisplayLocationDto;
-import ro.hacktm.oradea.epiata.model.external_services.DistanceDto;
 import ro.hacktm.oradea.epiata.model.external_services.DistanceContent;
+import ro.hacktm.oradea.epiata.model.external_services.DistanceDto;
 import ro.hacktm.oradea.epiata.model.external_services.GeoCodeResponse;
 
 import java.util.HashMap;
@@ -15,7 +14,7 @@ import java.util.Map;
 import java.util.Objects;
 
 @Service
-public class ExternalServices implements ExternalServicesApi {
+public class ExternalServices {
 
     private static final String GEO_CODE_URL =
             "https://geocoder.api.here.com/6.2/geocode.json" +
@@ -32,14 +31,6 @@ public class ExternalServices implements ExternalServicesApi {
 
     private RestTemplate restTemplate = new RestTemplate();
 
-    DisplayLocationDto getAddressGeoCode(String address) {
-        Map<String, String> params = getAddressInParams(address);
-        HttpEntity entity = getHttpEntity();
-        ResponseEntity<GeoCodeResponse> response = restTemplate
-                .exchange(GEO_CODE_URL, HttpMethod.GET, entity, GeoCodeResponse.class, params);
-        return getLocation(response);
-    }
-
     public DistanceDto getDistanceBetweenLocations(String startAddress, String endAddress) {
         Map<String, String> params = getDistanceBetweenAddresses(startAddress, endAddress);
         HttpEntity entity = getHttpEntity();
@@ -48,10 +39,18 @@ public class ExternalServices implements ExternalServicesApi {
         return getDistanceContent(response);
     }
 
+    DisplayLocationDto getAddressGeoCode(String address) {
+        Map<String, String> params = getAddressInParams(address);
+        HttpEntity entity = getHttpEntity();
+        ResponseEntity<GeoCodeResponse> response = restTemplate
+                .exchange(GEO_CODE_URL, HttpMethod.GET, entity, GeoCodeResponse.class, params);
+        return getLocation(response);
+    }
+
     private DistanceDto getDistanceContent(ResponseEntity<DistanceContent> response) {
         try {
             return Objects.requireNonNull(response.getBody()).getDistanceContentList().get(0);
-        }catch (Exception e){
+        } catch (Exception e) {
             throw new ExternalServicesException("Cannot return distance between two locations");
         }
     }
