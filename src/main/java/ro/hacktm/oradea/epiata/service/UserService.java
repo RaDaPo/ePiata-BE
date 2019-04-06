@@ -7,7 +7,7 @@ import org.springframework.stereotype.Service;
 import ro.hacktm.oradea.epiata.exceptions.UserException;
 import ro.hacktm.oradea.epiata.model.dto.UserDto;
 import ro.hacktm.oradea.epiata.model.entity.UserDao;
-import ro.hacktm.oradea.epiata.model.external_services.DisplayLocation;
+import ro.hacktm.oradea.epiata.model.external_services.DisplayLocationDto;
 import ro.hacktm.oradea.epiata.repository.UserRepository;
 
 import java.util.List;
@@ -36,7 +36,7 @@ public class UserService {
 
     public void createUser(UserDto userDto) {
         UserDao userEntity = new UserDao();
-        DisplayLocation coordinates = externalServices.getAddressGeoCode(userDto.getAddress());
+        DisplayLocationDto coordinates = externalServices.getAddressGeoCode(userDto.getAddress());
         BeanUtils.copyProperties(userDto, userEntity);
         userEntity.getLocation().setLatitude(coordinates.getLatitude());
         userEntity.getLocation().setLongitude(coordinates.getLongitude());
