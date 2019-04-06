@@ -11,6 +11,7 @@ import ro.hacktm.oradea.epiata.model.external_services.DisplayLocationDto;
 import ro.hacktm.oradea.epiata.repository.UserRepository;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -24,7 +25,7 @@ public class UserService {
     public List<UserDto> getAllUsers() {
         List<UserDao> entity = repository.findAll();
         if (!entity.isEmpty()) {
-            return entity.stream().map(UserDao::toDto).collect(Collectors.toList());
+            return entity.stream().filter(Objects::nonNull).map(UserDao::toDto).collect(Collectors.toList());
         } else {
             throw new UserException("Users not found exception");
         }

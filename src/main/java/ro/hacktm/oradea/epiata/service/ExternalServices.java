@@ -37,19 +37,27 @@ public class ExternalServices {
         try {
             return getDistanceDto(params, entity);
         } catch (Exception e) {
-            throw new ExternalServicesException("Cannot receive response from service");
+            throw new ExternalServicesException("Cannot receive response from distance service");
         }
     }
 
     private DistanceDto getDistanceDto(Map<String, String> params, HttpEntity entity) {
-        ResponseEntity<DistanceContent> response = restTemplate
-                .exchange(DISTANCE_URL, HttpMethod.GET, entity, DistanceContent.class, params);
-        DistanceDto dto = getDistanceContent(response);
-        return formatUnitTypes(dto);
+            ResponseEntity<DistanceContent> response = restTemplate
+                    .exchange(DISTANCE_URL, HttpMethod.GET, entity, DistanceContent.class, params);
+            DistanceDto dto = getDistanceContent(response);
+            return formatUnitTypes(dto);
     }
 
     DisplayLocationDto getAddressGeoCode(String address) {
         Map<String, String> params = getAddressInParams(address);
+        try {
+            return getDisplayLocationDto(params);
+        }catch (Exception e){
+            throw new ExternalServicesException("Cannot receive response from geo location service");
+        }
+    }
+
+    private DisplayLocationDto getDisplayLocationDto(Map<String, String> params) {
         HttpEntity entity = getHttpEntity();
         ResponseEntity<GeoCodeResponse> response = restTemplate
                 .exchange(GEO_CODE_URL, HttpMethod.GET, entity, GeoCodeResponse.class, params);
