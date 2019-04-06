@@ -34,6 +34,14 @@ public class ExternalServices {
     public DistanceDto getDistanceBetweenLocations(String startAddress, String endAddress) {
         Map<String, String> params = getDistanceBetweenAddresses(startAddress, endAddress);
         HttpEntity entity = getHttpEntity();
+        try {
+            return getDistanceDto(params, entity);
+        } catch (Exception e) {
+            throw new ExternalServicesException("Cannot receive response from service");
+        }
+    }
+
+    private DistanceDto getDistanceDto(Map<String, String> params, HttpEntity entity) {
         ResponseEntity<DistanceContent> response = restTemplate
                 .exchange(DISTANCE_URL, HttpMethod.GET, entity, DistanceContent.class, params);
         DistanceDto dto = getDistanceContent(response);
@@ -49,17 +57,17 @@ public class ExternalServices {
     }
 
     private DistanceDto formatUnitTypes(DistanceDto dto) {
-        dto.setTimeToDestination(formatTime(dto.getTime()));
-        dto.setTimeToDestination(formatDistance(dto.getDistance()));
+        dto.setTimeInMin(formatTime(dto.getTime()));
+        dto.setDistanceInKm(formatDistance(dto.getDistance()));
         return dto;
     }
 
-    private String formatDistance(long distance) {
-        return String.valueOf(distance * 0.001);
+    private String formatDistance(int distance) {
+        return String.valueOf((double) distance / 1000);
     }
 
     private String formatTime(long time) {
-        return String.valueOf((time % 3600) / 60);
+        return String.valueOf(time / 60);
     }
 
 
@@ -89,8 +97,8 @@ public class ExternalServices {
     private Map<String, String> getAddressInParams(String address) {
         Map<String, String> params = new HashMap<>();
         params.put("searchtext", address);
-        params.put("api_id", "qBy805mD1ZqfBRcLfiKO");
-        params.put("api_code", "hBvOm61wN4vBXaoG0zbE6w");
+        params.put("api_id", "knnbN1GnjwVdTh62SSdB");
+        params.put("api_code", "Fcs2O5Pm7OPu_OSZEQFHGA");
         return params;
     }
 
@@ -98,8 +106,8 @@ public class ExternalServices {
         Map<String, String> params = new HashMap<>();
         params.put("start_location", formatAddress(startAddress));
         params.put("end_location", formatAddress(endAddress));
-        params.put("api_id", "qBy805mD1ZqfBRcLfiKO");
-        params.put("api_code", "hBvOm61wN4vBXaoG0zbE6w");
+        params.put("api_id", "knnbN1GnjwVdTh62SSdB");
+        params.put("api_code", "Fcs2O5Pm7OPu_OSZEQFHGA");
         return params;
     }
 
