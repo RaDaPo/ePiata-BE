@@ -9,4 +9,6 @@ import java.util.List;
 @Repository
 public interface OfferRepository extends PagingAndSortingRepository<OfferDao, Long> {
 	List<OfferDao> findByCategoryAndNameAndCounty(Long categoryId, String name, String county);
+
+	List<OfferDao> findAll();
 }

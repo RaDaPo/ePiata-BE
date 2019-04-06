@@ -11,7 +11,6 @@ import ro.hacktm.oradea.epiata.repository.OfferRepository;
 import ro.hacktm.oradea.epiata.repository.TenderRepository;
 
 import java.util.Date;
-import java.util.List;
 import java.util.Objects;
 
 @Service
@@ -28,8 +27,7 @@ public class Scheduler {
 	}
 
 	private void validateOffer() {
-		List<OfferDao> offersList = repository.findAll();
-		offersList
+		repository.findAll()
 				.stream()
 				.filter(Objects::nonNull)
 				.forEach(this::validateOfferDates);
