@@ -9,8 +9,6 @@ public class EpiataApplication {
 
     public static void main(String[] args) {
         SpringApplication.run(EpiataApplication.class, args);
-        ExternalServices externalServices = new ExternalServices();
-        Object location = externalServices.getAddressGeoCode("Oradea");
     }
 
 }
