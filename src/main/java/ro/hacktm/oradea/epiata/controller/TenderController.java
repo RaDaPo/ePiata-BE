@@ -4,10 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RestController;
 import ro.hacktm.oradea.epiata.apis.TenderApi;
-import ro.hacktm.oradea.epiata.model.dto.TenderAcceptUser;
-import ro.hacktm.oradea.epiata.model.dto.TenderAddUsersRequestDto;
-import ro.hacktm.oradea.epiata.model.dto.TenderRequestDto;
-import ro.hacktm.oradea.epiata.model.dto.TenderResponseDto;
+import ro.hacktm.oradea.epiata.model.dto.*;
 import ro.hacktm.oradea.epiata.model.entity.TenderDao;
 import ro.hacktm.oradea.epiata.repository.TenderAttendeesRepository;
 import ro.hacktm.oradea.epiata.service.TenderService;
@@ -27,7 +24,7 @@ public class TenderController implements TenderApi {
 		return tenderService.getAllTenders();
 	}
 
-	public TenderResponseDto addTender(TenderRequestDto tenderRequestDto) {
+	public TenderResponseDto addTender(TenderAddRequest tenderRequestDto) {
 		return tenderService.addNewTender(tenderRequestDto);
 	}
 

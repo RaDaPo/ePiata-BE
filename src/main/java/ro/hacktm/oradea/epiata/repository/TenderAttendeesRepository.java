@@ -11,4 +11,5 @@ public interface TenderAttendeesRepository extends PagingAndSortingRepository<Te
 
 	TenderAttendee findByUserId(Long userId);
 
+
 }
