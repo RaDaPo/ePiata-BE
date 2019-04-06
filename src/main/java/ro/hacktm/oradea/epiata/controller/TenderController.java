@@ -6,13 +6,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RestController;
 import ro.hacktm.oradea.epiata.apis.TenderApi;
 import ro.hacktm.oradea.epiata.model.dto.TenderDto;
+import ro.hacktm.oradea.epiata.model.entity.AcceptedUser;
 import ro.hacktm.oradea.epiata.model.entity.TenderDao;
 import ro.hacktm.oradea.epiata.model.entity.UserDao;
 import ro.hacktm.oradea.epiata.service.TenderService;
 import ro.hacktm.oradea.epiata.service.UserService;
 
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @RestController
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
@@ -40,5 +40,21 @@ public class TenderController implements TenderApi {
 			tenderService.save(tender.get());
 		}
 		return tender.orElseThrow(RuntimeException::new);
+	}
+
+	public void acceptUser(Long userId, Long id) {
+		Optional<TenderDao> tender = tenderService.getTenderById(id);
+		if (tender.isPresent()) {
+			if(tender.get().getAcceptedUserIds() != null) {
+				AcceptedUser acceptedUser = new AcceptedUser();
+				acceptedUser.setUserId(userId);
+				tender.get().getAcceptedUserIds().add(acceptedUser);
+			} else {
+				AcceptedUser acceptedUser = new AcceptedUser();
+				acceptedUser.setUserId(userId);
+				tender.get().setAcceptedUserIds(Collections.singletonList(acceptedUser));
+			}
+			tenderService.save(tender.get());
+		}
 	}
 }
