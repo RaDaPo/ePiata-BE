@@ -13,10 +13,10 @@ import java.util.Date;
 @Data
 public class TenderAddRequest {
 
-	private String tile;
+	private String title;
 	private String description;
 	private String unit;
-	private String pricePerUnit;
+	private Double pricePerUnit;
 	private String distance;
 	private Long ownerId;
 	private boolean status;

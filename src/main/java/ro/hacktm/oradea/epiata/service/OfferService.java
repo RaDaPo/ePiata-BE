@@ -23,7 +23,7 @@ public class OfferService {
 
     public List<OfferDto> getAllOffers(GetAllOffersRequest request) {
         List<OfferDao> offersList = repository
-                .findByCategoryAndNameAndCounty(request.getCategory(), request.getSearchTerm(), request.getCounty());
+                .findByCategoryAndNameAndLocation_Address(request.getCategory(), request.getSearchTerm(), request.getCounty());
         return offersList
                 .stream()
                 .filter(Objects::nonNull)

@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import ro.hacktm.oradea.epiata.exception.NeededGrossMassExceeded;
 import ro.hacktm.oradea.epiata.model.dto.TenderAcceptUser;
 import ro.hacktm.oradea.epiata.model.dto.TenderAddRequest;
 import ro.hacktm.oradea.epiata.model.dto.TenderAddUsersRequestDto;
@@ -41,14 +42,18 @@ public class TenderService {
 		TenderDao tender = new TenderDao();
 		BeanUtils.copyProperties(tenderRequestDto, tender);
 		Optional<UserDao> owner = userService.getUserDaoById(tenderRequestDto.getOwnerId());
-		owner.ifPresent(userDao -> tender.setOwner(userDao.toOwnerDao()));
+		if(owner.isPresent()) {
+			owner.ifPresent(userDao -> tender.setOwner(userDao.toOwnerDao()));
+			tender.setLocation(owner.get().getLocation());
+		}
+		tender.setTitle(tenderRequestDto.getTitle());
 		save(tender);
 		return tender.toDto();
 	}
 
 	public TenderDao addAttendeesToTender(TenderAddUsersRequestDto tenderRequestDto) {
 		Optional<TenderDao> tender = getTenderById(tenderRequestDto.getTenderId());
-		if (tender.isPresent() && (tender.get().getNeededGrossMass() - tender.get().getGatheredGrossMass()) > tenderRequestDto.getParticipationMass()) {
+		if (tender.isPresent() && getNeededGrossMassPlusMarje(tender.get()) > tenderRequestDto.getParticipationMass()) {
 			Optional<UserDao> user = userService.getUserDaoById(tenderRequestDto.getUserId());
 			if (user.isPresent()) {
 				tender.get().setGatheredGrossMass(tender.get().getGatheredGrossMass() + tenderRequestDto.getParticipationMass());
@@ -59,8 +64,13 @@ public class TenderService {
 				tender.get().getAllTenderAttendees().add(tenderAttendee);
 				save(tender.get());
 			}
+			return tender.get();
 		}
-		return tender.orElseThrow(RuntimeException::new);
+		throw new NeededGrossMassExceeded();
+	}
+
+	private int getNeededGrossMassPlusMarje(TenderDao tender) {
+		return (tender.getNeededGrossMass() - tender.getGatheredGrossMass()) + tender.getNeededGrossMass() / 5;
 	}
 
 	public void acceptAttendeeToTender(TenderAcceptUser acceptUser) {

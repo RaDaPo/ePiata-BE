@@ -9,8 +9,7 @@ class TenderRequestDto {
 	private String title;
 	private String description;
 	private String unit;
-	private String pricePerUnit;
-	private String distance;
+	private Double pricePerUnit;
 	private Long ownerId;
 	private boolean status;
 	private Integer neededGrossMass;

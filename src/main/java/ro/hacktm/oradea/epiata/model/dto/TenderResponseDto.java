@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Data;
 import ro.hacktm.oradea.epiata.model.entity.AcceptedUser;
+import ro.hacktm.oradea.epiata.model.entity.Location;
 import ro.hacktm.oradea.epiata.model.entity.TenderAttendee;
 
 import javax.persistence.Temporal;
@@ -17,7 +18,7 @@ public class TenderResponseDto {
 	private String title;
 	private String description;
 	private String unit;
-	private String pricePerUnit;
+	private Double pricePerUnit;
 	private String distance;
 	private String ownerName;
 	private Integer neededGrossMass = 0;
@@ -34,4 +35,5 @@ public class TenderResponseDto {
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
 	private Date endDate;
 	private Boolean active;
+	private Location location;
 }

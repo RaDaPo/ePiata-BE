@@ -21,8 +21,7 @@ public class TenderDao {
 	private Long id;
 	private String title;
 	@Column(name = "price_unit")
-	private String pricePerUnit;
-	private String distance;
+	private Double pricePerUnit;
 	private Integer neededGrossMass = 0;
 	private Integer gatheredGrossMass = 0;
 	private boolean status = true;
@@ -54,11 +53,11 @@ public class TenderDao {
 			inverseJoinColumns = {@JoinColumn(name = "tender_id")}
 	)
 	private List<UserDao> acceptedUsers = new ArrayList<>();
+	private Location location;
 
 	public TenderResponseDto toDto() {
 		TenderResponseDto dto = new TenderResponseDto();
 		dto.setDescription(this.getDescription());
-		dto.setDistance(this.getDistance());
 		dto.setTitle(this.getTitle());
 		dto.setPricePerUnit(this.getPricePerUnit());
 		dto.setUnit(this.getUnit());
@@ -70,6 +69,7 @@ public class TenderDao {
 		dto.setActive(this.getActive());
 		dto.setStartDate(this.getStartDate());
 		dto.setEndDate(this.getEndDate());
+		dto.setLocation(this.getLocation());
 		return dto;
 	}
 }
