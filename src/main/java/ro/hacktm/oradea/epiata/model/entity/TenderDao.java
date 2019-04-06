@@ -70,6 +70,7 @@ public class TenderDao {
 		dto.setStartDate(this.getStartDate());
 		dto.setEndDate(this.getEndDate());
 		dto.setLocation(this.getLocation());
+		dto.setType(this.getType());
 		return dto;
 	}
 }

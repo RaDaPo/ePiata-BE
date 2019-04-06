@@ -5,10 +5,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ro.hacktm.oradea.epiata.exception.NeededGrossMassExceeded;
-import ro.hacktm.oradea.epiata.model.dto.TenderAcceptUser;
-import ro.hacktm.oradea.epiata.model.dto.TenderAddRequest;
-import ro.hacktm.oradea.epiata.model.dto.TenderAddUsersRequestDto;
-import ro.hacktm.oradea.epiata.model.dto.TenderResponseDto;
+import ro.hacktm.oradea.epiata.model.dto.*;
 import ro.hacktm.oradea.epiata.model.entity.AcceptedUser;
 import ro.hacktm.oradea.epiata.model.entity.TenderAttendee;
 import ro.hacktm.oradea.epiata.model.entity.TenderDao;
@@ -127,6 +124,10 @@ public class TenderService {
 	}
 
 	public List<TenderDao> findByDescriptionContaining(String searchPhrase) {
-		return repository.findByDescriptionContainingAndActiveTrue(searchPhrase);
+		return repository.findByDescriptionOrTitleContainingAndActiveTrue(searchPhrase);
+	}
+
+	public List<TenderDao> findByCategoryTypeAndCounty(TenderFilteredRequestDto requestDto) {
+		return repository.findByTypeOrLocation_CountyAndActiveTrue(requestDto.getCategoryType(), requestDto.getCounty());
 	}
 }

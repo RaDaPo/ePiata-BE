@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Data;
 import ro.hacktm.oradea.epiata.model.entity.AcceptedUser;
+import ro.hacktm.oradea.epiata.model.entity.CategoryType;
 import ro.hacktm.oradea.epiata.model.entity.Location;
 import ro.hacktm.oradea.epiata.model.entity.TenderAttendee;
 
@@ -36,4 +37,5 @@ public class TenderResponseDto {
 	private Date endDate;
 	private Boolean active;
 	private Location location;
+	private CategoryType type;
 }

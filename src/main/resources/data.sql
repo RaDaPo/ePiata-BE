@@ -1,9 +1,9 @@
-INSERT INTO user(id, address, street_no, name, email)
-VALUES (1, 'Oradea, Bihor', 2, 'Gica Contra', 'gica@email.com'),
-       (2, 'Beius, Bihor', 12, 'Andrei Contra', 'gica@email.com'),
-       (3, 'Tinca, Bihor', 22, 'Vitel Capra', 'capra@email.com'),
-       (4, 'Stei, Bihor', 23, 'Intrusul Intrusilor', 'intrusul@email.com'),
-       (5, 'Marghita, Bihor', 52, 'Ionel Busuioc', 'gica@email.com');
+INSERT INTO user(id, address,  street_no, name, email, county)
+VALUES (1, 'Oradea, Bihor', 2, 'Gica Contra', 'gica@email.com', 'Bihor'),
+       (2, 'Beius, Bihor', 12, 'Andrei Contra', 'gica@email.com', 'Arad'),
+       (3, 'Tinca, Bihor', 22, 'Vitel Capra', 'capra@email.com', 'Cluj'),
+       (4, 'Stei, Bihor', 23, 'Intrusul Intrusilor', 'intrusul@email.com', 'Salaj'),
+       (5, 'Marghita, Bihor', 52, 'Ionel Busuioc', 'gica@email.com', 'Bihor');
 
 
 -- INSERT INTO tender(id, description, distance, title, price_unit, status, unit)

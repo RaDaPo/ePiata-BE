@@ -12,5 +12,6 @@ public class Location {
 	Integer streetNo;
 	String latitude;
 	String longitude;
+	String county;
 
 }
