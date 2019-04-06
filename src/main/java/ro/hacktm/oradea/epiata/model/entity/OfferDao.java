@@ -32,10 +32,10 @@ public class OfferDao {
 	public OfferDto toDto() {
 		OfferDto dto = new OfferDto();
 		dto.setDescription(this.getDescription());
-		dto.setEndDate(this.getEndDate());
+		dto.setEndDate(this.getEndDate().toString());
 		dto.setImgLocation(this.getImgLocation());
 		dto.setName(this.getName());
-		dto.setStartDate(this.getStartDate());
+		dto.setStartDate(this.getStartDate().toString());
 		dto.setOwner(this.getOwner());
 		return dto;
 	}

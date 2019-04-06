@@ -1,11 +1,11 @@
 package ro.hacktm.oradea.epiata.model.entity;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.Data;
 import ro.hacktm.oradea.epiata.model.dto.TenderDto;
 
 import javax.persistence.*;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Entity
 @Table(name = "TENDER")
@@ -29,7 +29,6 @@ public class TenderDao {
 			joinColumns = {@JoinColumn(name = "user_id")},
 			inverseJoinColumns = {@JoinColumn(name = "tender_id")}
 	)
-	@JsonBackReference
 	private List<UserDao> users;
 
 	public TenderDto toDto() {
@@ -40,7 +39,7 @@ public class TenderDao {
 		dto.setOwner(this.getOwner());
 		dto.setPricePerUnit(this.getPricePerUnit());
 		dto.setUnit(this.getUnit());
-		dto.setUsers(this.getUsers());
+		dto.setUsers(this.getUsers().stream().map(UserDao::toDto).collect(Collectors.toList()));
 		return dto;
 	}
 }
