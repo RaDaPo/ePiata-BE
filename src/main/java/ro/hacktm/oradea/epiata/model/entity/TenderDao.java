@@ -1,8 +1,10 @@
 package ro.hacktm.oradea.epiata.model.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.Data;
-import lombok.NoArgsConstructor;
-import ro.hacktm.oradea.epiata.model.dto.TenderDto;
+import ro.hacktm.oradea.epiata.model.dto.TenderResponseDto;
 
 import javax.persistence.*;
 import java.util.List;
@@ -11,7 +13,6 @@ import java.util.stream.Collectors;
 @Entity
 @Table(name = "TENDER")
 @Data
-@NoArgsConstructor
 public class TenderDao {
 
 	@Id
@@ -19,14 +20,24 @@ public class TenderDao {
 	private Long id;
 	private String name;
 	@OneToMany(cascade = {CascadeType.ALL})
+	@JsonManagedReference
+	@JsonIgnore
 	private List<AcceptedUser> acceptedUserIds;
 	private String description;
 	private String unit;
+	@OneToOne(cascade = {CascadeType.ALL})
+	private TenderOwner owner;
 	@Column(name = "price_unit")
 	private String pricePerUnit;
 	private String distance;
-	private String owner;
+	private Integer neededGrossMass = 0;
+	private Integer gatheredGrossMass= 0;
 	private boolean status;
+	@OneToMany(cascade = {CascadeType.ALL})
+	@JsonManagedReference
+	@JsonIgnore
+	private List<TenderAttendee> tenderAttendees;
+
 
 	@ManyToMany(cascade = {CascadeType.ALL})
 	@JoinTable(
@@ -36,15 +47,17 @@ public class TenderDao {
 	)
 	private List<UserDao> users;
 
-	public TenderDto toDto() {
-		TenderDto dto = new TenderDto();
+	public TenderResponseDto toDto() {
+		TenderResponseDto dto = new TenderResponseDto();
 		dto.setDescription(this.getDescription());
 		dto.setDistance(this.getDistance());
 		dto.setName(this.getName());
-		dto.setOwner(this.getOwner());
 		dto.setPricePerUnit(this.getPricePerUnit());
 		dto.setUnit(this.getUnit());
-		dto.setUsers(this.getUsers().stream().map(UserDao::toDto).collect(Collectors.toList()));
+		dto.setOwnerName(this.getOwner().getName());
+		dto.setUsers(this.getUsers().stream().map(UserDao::getName).collect(Collectors.toList()));
+		dto.setTenderAttendees(this.getTenderAttendees());
+		dto.setAcceptedUserIds(this.getAcceptedUserIds());
 		return dto;
 	}
 }

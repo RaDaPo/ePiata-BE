@@ -2,7 +2,10 @@ package ro.hacktm.oradea.epiata.apis;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
-import ro.hacktm.oradea.epiata.model.dto.TenderDto;
+import ro.hacktm.oradea.epiata.model.dto.TenderAcceptUser;
+import ro.hacktm.oradea.epiata.model.dto.TenderAddUsersRequestDto;
+import ro.hacktm.oradea.epiata.model.dto.TenderRequestDto;
+import ro.hacktm.oradea.epiata.model.dto.TenderResponseDto;
 import ro.hacktm.oradea.epiata.model.entity.TenderDao;
 
 import java.util.List;
@@ -11,15 +14,15 @@ import java.util.List;
 public interface TenderApi {
 
 	@GetMapping
-	List<TenderDto> getAllUsers();
+	List<TenderResponseDto> getAllUsers();
 
 	@PostMapping
-	TenderDao addTender(@RequestBody TenderDto tenderDto);
+	TenderResponseDto addTender(@RequestBody TenderRequestDto tenderRequestDto);
 
-	@PutMapping(value = "/{id}")
-	TenderDao updateTender(@RequestBody TenderDto tenderDto, @PathVariable(name = "id") Long id);
+	@PutMapping
+	TenderDao addUsersToTender(@RequestBody TenderAddUsersRequestDto tenderRequestDto);
 
-	@PutMapping(value = "/accept/{id}")
+	@PutMapping(value = "/accept")
 	@ResponseStatus(value = HttpStatus.NO_CONTENT)
-	void acceptUser(@RequestParam(name = "acceptedUserId") Long userId, @PathVariable(name = "id") Long id);
+	void acceptUser(@RequestBody TenderAcceptUser acceptUser);
 }

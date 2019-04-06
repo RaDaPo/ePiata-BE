@@ -18,59 +18,59 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
 public class UserService {
 
-    private final UserRepository repository;
-    private final ExternalServices externalServices;
+	private final UserRepository repository;
+	private final ExternalServices externalServices;
 
-    public List<UserDto> getAllUsers() {
-        List<UserDao> entity = repository.findAll();
-        if (!entity.isEmpty()) {
-            return entity.stream().map(UserDao::toDto).collect(Collectors.toList());
-        } else {
-            throw new UserException("Users not found exception");
-        }
-    }
+	public List<UserDto> getAllUsers() {
+		List<UserDao> entity = repository.findAll();
+		if (!entity.isEmpty()) {
+			return entity.stream().map(UserDao::toDto).collect(Collectors.toList());
+		} else {
+			throw new UserException("Users not found exception");
+		}
+	}
 
-    public Optional<UserDao> getUserById(Long id) {
-        return repository.findById(id);
-    }
+	public Optional<UserDao> getUserById(Long id) {
+		return repository.findById(id);
+	}
 
-    public void createUser(UserDto userDto) {
-        UserDao userEntity = new UserDao();
-        DisplayLocation coordinates = externalServices.getAddressGeoCode(userDto.getAddress());
-        BeanUtils.copyProperties(userDto, userEntity);
-        userEntity.getLocation().setLatitude(coordinates.getLatitude());
-        userEntity.getLocation().setLongitude(coordinates.getLongitude());
-        repository.save(userEntity);
-    }
+	public void createUser(UserDto userDto) {
+		UserDao userEntity = new UserDao();
+		DisplayLocation coordinates = externalServices.getAddressGeoCode(userDto.getAddress());
+		BeanUtils.copyProperties(userDto, userEntity);
+		userEntity.getLocation().setLatitude(coordinates.getLatitude());
+		userEntity.getLocation().setLongitude(coordinates.getLongitude());
+		repository.save(userEntity);
+	}
 
-    public UserDto getUser(Long userId) {
-        Optional<UserDao> user = repository.findById(userId);
-        if (user.isPresent()) {
-            UserDto userDto = new UserDto();
-            BeanUtils.copyProperties(user.get(), userDto);
-            return userDto;
-        } else {
-            throw new UserException("User not found exception");
-        }
-    }
+	public UserDto getUser(Long userId) {
+		Optional<UserDao> user = repository.findById(userId);
+		if (user.isPresent()) {
+			UserDto userDto = new UserDto();
+			BeanUtils.copyProperties(user.get(), userDto);
+			return userDto;
+		} else {
+			throw new UserException("User not found exception");
+		}
+	}
 
-    public void updateUser(UserDto dto) {
-        Optional<UserDao> userEntity = repository.findById(dto.getId());
-        if (userEntity.isPresent()) {
-            UserDao user = new UserDao();
-            BeanUtils.copyProperties(dto, user);
-            repository.save(user);
-        } else {
-            throw new UserException("User cannot be updated exception");
-        }
-    }
+	public void updateUser(UserDto dto) {
+		Optional<UserDao> userEntity = repository.findById(dto.getId());
+		if (userEntity.isPresent()) {
+			UserDao user = new UserDao();
+			BeanUtils.copyProperties(dto, user);
+			repository.save(user);
+		} else {
+			throw new UserException("User cannot be updated exception");
+		}
+	}
 
-    public void deleteUser(Long id) {
-        Optional<UserDao> userEntity = repository.findById(id);
-        if (userEntity.isPresent()) {
-            repository.delete(userEntity.get());
-        } else {
-            throw new UserException("User cannot be deleted exception");
-        }
-    }
+	public void deleteUser(Long id) {
+		Optional<UserDao> userEntity = repository.findById(id);
+		if (userEntity.isPresent()) {
+			repository.delete(userEntity.get());
+		} else {
+			throw new UserException("User cannot be deleted exception");
+		}
+	}
 }

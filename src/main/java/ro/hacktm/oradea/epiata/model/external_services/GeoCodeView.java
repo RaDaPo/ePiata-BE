@@ -8,6 +8,6 @@ import java.util.List;
 @Data
 public class GeoCodeView {
 
-    @JsonProperty("Result")
-    private List<Result> results;
+	@JsonProperty("Result")
+	private List<Result> results;
 }

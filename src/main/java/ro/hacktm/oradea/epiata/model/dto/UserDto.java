@@ -17,7 +17,7 @@ public class UserDto {
 	@JsonInclude(value = JsonInclude.Include.NON_NULL)
 	private String email;
 	@JsonInclude(value = JsonInclude.Include.NON_EMPTY)
-	private List<TenderDto> tenders;
+	private List<TenderRequestDto> tenders;
 	@JsonInclude(value = JsonInclude.Include.NON_EMPTY)
 	private List<OfferDto> offers;
 	@JsonInclude(value = JsonInclude.Include.NON_NULL)

@@ -5,14 +5,15 @@ import lombok.Data;
 import java.util.List;
 
 @Data
-public class TenderDto {
+public class TenderRequestDto {
 	private String name;
 	private String description;
 	private String unit;
 	private String pricePerUnit;
 	private String distance;
-	private String owner;
+	private Long ownerId;
 	private boolean status;
+	private Integer neededGrossMass;
 	private Long userId;
 	private List<UserDto> users;
 	private List<Integer> acceptedUserIds;

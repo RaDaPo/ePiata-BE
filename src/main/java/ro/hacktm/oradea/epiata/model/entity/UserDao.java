@@ -38,4 +38,12 @@ public class UserDao {
 		dto.setLocation(this.location);
 		return dto;
 	}
+
+	public TenderOwner toOwnerDao() {
+		TenderOwner dto = new TenderOwner();
+		dto.setEmail(this.getEmail());
+		dto.setName(this.getName());
+		dto.setLocation(this.location);
+		return dto;
+	}
 }
