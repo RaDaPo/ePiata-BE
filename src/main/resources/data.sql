@@ -1,9 +1,9 @@
-INSERT INTO user(id, city, county, street_no, name, email)
-VALUES (1, 'Oradea', 'Bihor', 2, 'Gica Contra', 'gica@email.com'),
-       (2, 'Beius', 'Bihor', 12, 'Andrei Contra', 'gica@email.com'),
-       (3, 'Tinca', 'Bihor', 22, 'Vitel Capra', 'capra@email.com'),
-       (4, 'Stei', 'Bihor', 23, 'Intrusul Intrusilor', 'intrusul@email.com'),
-       (5, 'Marghita', 'Bihor', 52, 'Ionel Busuioc', 'gica@email.com');
+INSERT INTO user(id, city, county, street_no, name, email, street, zip)
+VALUES (1, 'Oradea', 'Bihor', 2, 'Gica Contra', 'gica@email.com', 'Decebal Blvd', 413333),
+       (2, 'Beius', 'Bihor', 12, 'Andrei Contra', 'gica@email.com', 'Dacia Blvd', 123312),
+       (3, 'Tinca', 'Bihor', 22, 'Vitel Capra', 'capra@email.com', 'Unirii Blvd', 443322),
+       (4, 'Stei', 'Bihor', 23, 'Intrusul Intrusilor', 'intrusul@email.com', 'Eroilor Blvd', 554543),
+       (5, 'Marghita', 'Bihor', 52, 'Ionel Busuioc', 'gica@email.com', 'Cantemir Blvd', 765654);
 
 INSERT INTO categories(id, type, name)
 VALUES (1, 'FRUITS', 'Mere'),

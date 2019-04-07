@@ -29,6 +29,14 @@ public class TenderService {
 	private final CategoryRepository categoryRepository;
 
 	public List<TenderResponseDto> getAllTenders() {
+		return repository.findAll()
+				.stream()
+				.filter(Objects::nonNull)
+				.map(Tender::toDto)
+				.collect(Collectors.toList());
+	}
+
+	public List<TenderResponseDto> getAllActiveTenders() {
 		return repository.findAllByActiveTrue()
 				.stream()
 				.filter(Objects::nonNull)
@@ -59,26 +67,23 @@ public class TenderService {
 	}
 
 	private Tender processIfMassStillNeeded(TenderAddUsersRequestDto tenderRequestDto, Tender tender) {
-		if (getNeededGrossMassPlusMarje(tender) > tenderRequestDto.getParticipationMass()) {
-			Optional<User> user = userRepository.findById(tenderRequestDto.getUserId());
-			user.ifPresent(userDao -> setAttendees(tenderRequestDto, tender, userDao));
-			return tender;
-		}
-		throw new NeededGrossMassExceeded(getNeededGrossMassPlusMarje(tender) - tender.getGatheredGrossMass());
+		Optional<User> user = userRepository.findById(tenderRequestDto.getUserId());
+		user.ifPresent(userDao -> setAttendees(tenderRequestDto, tender, userDao));
+		return tender;
 	}
 
 	private void setAttendees(TenderAddUsersRequestDto tenderRequestDto, Tender tender, User user) {
-		tender.setGatheredGrossMass(tender.getGatheredGrossMass() + tenderRequestDto.getParticipationMass());
 		TenderAttendee tenderAttendee = new TenderAttendee();
 		tenderAttendee.setUserId(user.getId());
 		tenderAttendee.setParticipationMass(tenderRequestDto.getParticipationMass());
 		tenderAttendee.setName(user.getName());
 		tender.getAllTenderAttendees().add(tenderAttendee);
+		tender.setOfferedGrossMass(tender.getOfferedGrossMass() + tenderRequestDto.getParticipationMass());
 		save(tender);
 	}
 
 	private int getNeededGrossMassPlusMarje(Tender tender) {
-		return (tender.getNeededGrossMass() - tender.getGatheredGrossMass()) + tender.getNeededGrossMass() / 5;
+		return (tender.getNeededGrossMass() - tender.getGatheredAcceptedGrossMass()) + tender.getNeededGrossMass() / 5;
 	}
 
 	public void acceptAttendeeToTender(TenderAcceptUser acceptUser) {
@@ -86,44 +91,51 @@ public class TenderService {
 		Optional<User> user = userRepository.findById(acceptUser.getUserId());
 		if (tender.isPresent() && user.isPresent()) {
 			if (tender.get().getAcceptedUserIds() != null) {
-				TenderAttendee tenderAttendee = tenderAttendeesRepository.findByUserId(acceptUser.getUserId());
-				if (!tenderAttendee.getRejected().equals(true)) {
+				Optional<TenderAttendee> tenderAttendee = tenderAttendeesRepository.findByUserId(acceptUser.getUserId());
+				if (tenderAttendee.isPresent() && !tenderAttendee.get().getRejected().equals(true)) {
 					AcceptedUser acceptedUser = new AcceptedUser();
 					acceptedUser.setUserId(acceptUser.getUserId());
 					tender.get().getAcceptedUserIds().add(acceptedUser);
-					processAndSaveAttendee(tender.get(), user.get(), tenderAttendee, acceptedUser);
+					processAndSaveAttendee(tender.get(), user.get(), tenderAttendee.get(), acceptedUser);
 				}
 			} else {
-				TenderAttendee tenderAttendee = tenderAttendeesRepository.findByUserId(acceptUser.getUserId());
-				if (!tenderAttendee.getRejected().equals(true)) {
+				Optional<TenderAttendee> tenderAttendee = tenderAttendeesRepository.findByUserId(acceptUser.getUserId());
+				if (tenderAttendee.isPresent() && !tenderAttendee.get().getRejected().equals(true)) {
 					AcceptedUser acceptedUser = new AcceptedUser();
 					acceptedUser.setUserId(acceptUser.getUserId());
 					tender.get().setAcceptedUserIds(Collections.singletonList(acceptedUser));
-					processAndSaveAttendee(tender.get(), user.get(), tenderAttendee, acceptedUser);
+					processAndSaveAttendee(tender.get(), user.get(), tenderAttendee.get(), acceptedUser);
 				}
 			}
 		}
 	}
 
 	private void processAndSaveAttendee(Tender tender, User user, TenderAttendee tenderAttendee, AcceptedUser acceptedUser) {
-		tenderAttendee.setAccepted(true);
-		tenderAttendeesRepository.save(tenderAttendee);
-		tender.setGatheredGrossMass(tender.getGatheredGrossMass() + tenderAttendee.getParticipationMass());
-		acceptedUser.setName(user.getName());
-		tender.getAcceptedUsers().add(user);
-		if (tender.getGatheredGrossMass() >= tender.getNeededGrossMass() ||
-				tender.getGatheredGrossMass() < (tender.getNeededGrossMass() + tender.getNeededGrossMass() / 5)) {
-			tender.setActive(false);
+		if (getNeededGrossMassPlusMarje(tender) > tenderAttendee.getParticipationMass()) {
+			tenderAttendee.setAccepted(true);
+			tenderAttendeesRepository.save(tenderAttendee);
+			tender.setGatheredAcceptedGrossMass(tender.getGatheredAcceptedGrossMass() + tenderAttendee.getParticipationMass());
+			tender.setOfferedGrossMass(tender.getOfferedGrossMass() - tenderAttendee.getParticipationMass());
+			acceptedUser.setName(user.getName());
+			tender.getAcceptedUsers().add(user);
+			if (tender.getGatheredAcceptedGrossMass() >= tender.getNeededGrossMass() &&
+					tender.getGatheredAcceptedGrossMass() < (tender.getNeededGrossMass() + tender.getNeededGrossMass() / 5)) {
+				tender.setActive(false);
+			}
+			save(tender);
 		}
-		save(tender);
+		throw new NeededGrossMassExceeded(getNeededGrossMassPlusMarje(tender) - tender.getOfferedGrossMass());
+
 	}
 
 	public void declineAttendeeFromTender(TenderAcceptUser acceptUser) {
 		Optional<Tender> tender = getTenderById(acceptUser.getTenderId());
 		if (tender.isPresent() && tender.get().getAcceptedUserIds().stream().noneMatch(x -> x.getUserId().equals(acceptUser.getUserId()))) {
-			TenderAttendee tenderAttendee = tenderAttendeesRepository.findByUserId(acceptUser.getUserId());
-			tenderAttendee.setAccepted(false);
-			tenderAttendee.setRejected(true);
+			Optional<TenderAttendee> tenderAttendee = tenderAttendeesRepository.findByUserId(acceptUser.getUserId());
+			if (tenderAttendee.isPresent()) {
+				tenderAttendee.get().setAccepted(false);
+				tenderAttendee.get().setRejected(true);
+			}
 			Optional<User> userDao = userRepository.findById(acceptUser.getUserId());
 			userDao.ifPresent(dao -> tender.get().getAcceptedUsers().remove(dao));
 			save(tender.get());

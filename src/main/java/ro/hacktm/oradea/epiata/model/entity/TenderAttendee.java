@@ -1,11 +1,10 @@
 package ro.hacktm.oradea.epiata.model.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
+import java.util.List;
 
 @Entity
 @Data
@@ -20,5 +19,8 @@ public class TenderAttendee {
 	private String name;
 	private Boolean accepted = false;
 	private Boolean rejected = false;
+	@ManyToMany(mappedBy = "allTenderAttendees")
+	@JsonIgnore
+	private List<Tender> tenders;
 
 }

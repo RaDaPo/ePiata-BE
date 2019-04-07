@@ -20,6 +20,10 @@ public class TenderController implements TenderApi {
 		return getResponseEntityOk(tenderService.getAllTenders());
 	}
 
+	public ResponseEntity getAllActiveTenders() {
+		return getResponseEntityOk(tenderService.getAllActiveTenders());
+	}
+
 	public ResponseEntity addTender(TenderAddRequest tenderRequestDto) {
 		return getResponseEntityOk(tenderService.addNewTender(tenderRequestDto));
 	}

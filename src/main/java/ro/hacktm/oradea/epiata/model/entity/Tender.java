@@ -23,7 +23,8 @@ public class Tender {
 	@Column(name = "price_unit")
 	private Double pricePerUnit;
 	private Integer neededGrossMass = 0;
-	private Integer gatheredGrossMass = 0;
+	private Integer gatheredAcceptedGrossMass = 0;
+	private Integer offeredGrossMass = 0;
 	private String description;
 	private Boolean active = true;
 	@Temporal(TemporalType.DATE)
@@ -41,10 +42,14 @@ public class Tender {
 	private TenderOwner owner;
 	@OneToOne(cascade = {CascadeType.ALL})
 	private Category category;
-	@OneToMany(cascade = {CascadeType.ALL})
-	@JsonManagedReference
-	@JsonIgnore
+	@ManyToMany(cascade = {CascadeType.ALL})
+	@JoinTable(
+			name = "Tender_TenderAttendee",
+			joinColumns = {@JoinColumn(name = "tender_id")},
+			inverseJoinColumns = {@JoinColumn(name = "attendee_id")}
+	)
 	private List<TenderAttendee> allTenderAttendees;
+
 	@ManyToMany(cascade = {CascadeType.ALL})
 	@JoinTable(
 			name = "User_Tender",
@@ -64,7 +69,8 @@ public class Tender {
 		dto.setOwnerName(this.getOwner().getName());
 		dto.setAllTenderAttendees(this.getAllTenderAttendees());
 		dto.setAcceptedUserIds(this.getAcceptedUserIds());
-		dto.setGatheredGrossMass(this.getGatheredGrossMass());
+		dto.setGatheredAcceptedGrossMass(this.getGatheredAcceptedGrossMass());
+		dto.setOfferedGrossMass(this.getOfferedGrossMass());
 		dto.setNeededGrossMass(this.getNeededGrossMass());
 		dto.setActive(this.getActive());
 		dto.setStartDate(this.getStartDate());
