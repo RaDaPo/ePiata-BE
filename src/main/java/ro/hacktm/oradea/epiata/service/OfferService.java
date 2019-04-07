@@ -33,7 +33,7 @@ public class OfferService {
 
 	public List<OfferDto> getAllOffers() {
 		return repository.findAll()
-				.stream()
+				.parallelStream()
 				.filter(Objects::nonNull)
 				.map(this::getOfferDto)
 				.collect(Collectors.toList());
@@ -52,7 +52,7 @@ public class OfferService {
 	public List<OfferDto> getAllOffers(FilteredOffersRequest request) {
 
 		return getFilteredOffers(request)
-				.stream()
+                .parallelStream()
 				.filter(Objects::nonNull)
 				.map(this::getOfferDto)
 				.collect(Collectors.toList());
