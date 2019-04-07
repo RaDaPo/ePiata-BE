@@ -16,6 +16,6 @@ public class ExternalServicesController implements ExternalServicesApi {
 	private final ExternalServices externalServices;
 
 	public ResponseEntity getDistanceBetweenLocations(String startLocation, String endLocation) {
-		return getResponseEntityOk(externalServices.getDistanceBetweenLocations(startLocation, endLocation));
+		return getResponseEntityOk(externalServices.getDistanceBetweenLocations(endLocation));
 	}
 }

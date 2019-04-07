@@ -24,13 +24,10 @@ public class ExternalServices {
                     "&mode=fastest;car&app_id={api_id}"
                     + "&app_code={api_code}";
 
-    List<String> list = Arrays.asList("Cluj","Brasov","Bucuresti", "Botosani", "Iasi", "Constanta");
-
     private RestTemplate restTemplate = new RestTemplate();
 
-    public DistanceDto getDistanceBetweenLocations() {
-        Random rand = new Random();
-        Map<String, String> params = getDistanceBetweenAddresses("Oradea", list.get(rand.nextInt(5)));
+    public DistanceDto getDistanceBetweenLocations(String address) {
+        Map<String, String> params = getDistanceBetweenAddresses("Oradea", address);
         HttpEntity entity = getHttpEntity();
         try {
             return getDistanceDto(params, entity);
