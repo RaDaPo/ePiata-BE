@@ -21,6 +21,8 @@ public class Offer {
 	private String quantity;
 	private String price;
 
+	private String image;
+
 	private Long category;
 
 	@Embedded

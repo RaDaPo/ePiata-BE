@@ -13,7 +13,10 @@ import ro.hacktm.oradea.epiata.model.dto.OfferDto;
 import ro.hacktm.oradea.epiata.model.entity.Offer;
 import ro.hacktm.oradea.epiata.repository.OfferRepository;
 
-import javax.persistence.criteria.*;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Predicate;
+import javax.persistence.criteria.Root;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -30,7 +33,7 @@ public class OfferService {
 
 	public List<OfferDto> getAllOffers() {
 		return repository.findAll()
-				.stream()
+				.parallelStream()
 				.filter(Objects::nonNull)
 				.map(this::getOfferDto)
 				.collect(Collectors.toList());
@@ -49,39 +52,27 @@ public class OfferService {
 	public List<OfferDto> getAllOffers(FilteredOffersRequest request) {
 
 		return getFilteredOffers(request)
-				.stream()
+                .parallelStream()
 				.filter(Objects::nonNull)
-				.map(Offer::toDto)
+				.map(this::getOfferDto)
 				.collect(Collectors.toList());
 	}
 
 	private List<Offer> getFilteredOffers(FilteredOffersRequest request) {
-
-		Long categoryId = null;
-		String name = request.getSearchTerm();
-		String county = null;
-
-		if (request.getCategory() != null)
-			categoryId = request.getCategory();
-
-		if (request.getLocation() != null)
-			county = request.getLocation().getCounty();
-
 		return repository.findAll(new Specification<Offer>() {
 			@Nullable
 			@Override
 			public Predicate toPredicate(Root<Offer> root, CriteriaQuery<?> criteriaQuery, CriteriaBuilder criteriaBuilder) {
 				List<Predicate> predicates = new ArrayList<>();
-				Path<Object> offer = root.get("offer");
 
 				if (request.getSearchTerm() != null)
-					predicates.add(criteriaBuilder.equal(offer.get("name"), request.getSearchTerm()));
+					predicates.add(criteriaBuilder.like(criteriaBuilder.lower(root.get("name")), "%" + request.getSearchTerm().toLowerCase() + "%"));
 
 				if (request.getCategory() != null)
-					predicates.add(criteriaBuilder.equal(offer.get("category").get("name"), request.getCategory()));
+					predicates.add(criteriaBuilder.equal(root.get("category").get("name"), request.getCategory()));
 
 				if (request.getLocation() != null) {
-					predicates.add(criteriaBuilder.equal(offer.get("location").get("county"), request.getLocation().getCounty()));
+					predicates.add(criteriaBuilder.equal(root.get("location").get("county"), request.getLocation().getCounty()));
 				}
 
 				return criteriaBuilder.and(predicates.toArray(new Predicate[0]));
