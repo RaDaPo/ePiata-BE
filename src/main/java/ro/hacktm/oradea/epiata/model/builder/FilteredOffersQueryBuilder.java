@@ -4,5 +4,4 @@ public interface FilteredOffersQueryBuilder<T> {
 
 	T filterBy();
 
-
 }

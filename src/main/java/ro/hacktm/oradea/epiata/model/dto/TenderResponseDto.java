@@ -3,7 +3,9 @@ package ro.hacktm.oradea.epiata.model.dto;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Data;
-import ro.hacktm.oradea.epiata.model.entity.*;
+import ro.hacktm.oradea.epiata.model.entity.AcceptedUser;
+import ro.hacktm.oradea.epiata.model.entity.Location;
+import ro.hacktm.oradea.epiata.model.entity.TenderAttendee;
 
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -13,6 +15,7 @@ import java.util.List;
 @Data
 public class TenderResponseDto {
 
+	private Long id;
 	private String title;
 	private String description;
 	private String unit;

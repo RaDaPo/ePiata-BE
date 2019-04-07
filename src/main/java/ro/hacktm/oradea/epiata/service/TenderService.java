@@ -24,7 +24,6 @@ import java.util.stream.Collectors;
 public class TenderService {
 
 	private final TenderRepository repository;
-	private final UserService userService;
 	private final UserRepository userRepository;
 	private final TenderAttendeesRepository tenderAttendeesRepository;
 	private final CategoryRepository categoryRepository;

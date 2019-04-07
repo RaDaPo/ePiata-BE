@@ -56,6 +56,7 @@ public class Tender {
 
 	public TenderResponseDto toDto() {
 		TenderResponseDto dto = new TenderResponseDto();
+		dto.setId(this.getId());
 		dto.setDescription(this.getDescription());
 		dto.setTitle(this.getTitle());
 		dto.setPricePerUnit(this.getPricePerUnit());

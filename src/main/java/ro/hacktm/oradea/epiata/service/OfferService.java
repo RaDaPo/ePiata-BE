@@ -46,7 +46,6 @@ public class OfferService {
 
 	private List<Offer> getFilteredOffers(FilteredOffersRequest request) {
 
-
 		Long categoryId = null;
 		String name = request.getSearchTerm();
 		String county = null;
