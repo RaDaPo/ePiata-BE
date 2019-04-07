@@ -6,7 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ro.hacktm.oradea.epiata.exception.UserNotFoundException;
 import ro.hacktm.oradea.epiata.model.dto.UserDto;
-import ro.hacktm.oradea.epiata.model.entity.UserDao;
+import ro.hacktm.oradea.epiata.model.entity.User;
 import ro.hacktm.oradea.epiata.model.external_services.DisplayLocationDto;
 import ro.hacktm.oradea.epiata.repository.UserRepository;
 
@@ -22,7 +22,7 @@ public class UserService {
 	private final UserRepository repository;
 	private final ExternalServices externalServices;
 
-	private static UserDao copyToDao(UserDto from, UserDao to) {
+	private static User copyToDao(UserDto from, User to) {
 		BeanUtils.copyProperties(from, to);
 		return to;
 	}
@@ -31,16 +31,16 @@ public class UserService {
 		return repository.findAll()
 				.stream()
 				.filter(Objects::nonNull)
-				.map(UserDao::toDto)
+				.map(User::toDto)
 				.collect(Collectors.toList());
 	}
 
-	Optional<UserDao> getUserDaoById(Long id) {
+	Optional<User> getUserDaoById(Long id) {
 		return repository.findById(id);
 	}
 
 	public UserDto getUserById(Long id) {
-		Optional<UserDao> user = repository.findById(id);
+		Optional<User> user = repository.findById(id);
 
 		if (user.isPresent())
 			return user.get().toDto();
@@ -49,7 +49,7 @@ public class UserService {
 	}
 
 	public void createUser(UserDto userDto) {
-		UserDao userEntity = copyToDao(userDto, new UserDao());
+		User userEntity = copyToDao(userDto, new User());
 
 		DisplayLocationDto coordinates = externalServices.getAddressGeoCode(userDto.getAddress());
 		userEntity.getLocation().setLatitude(coordinates.getLatitude());
@@ -59,10 +59,10 @@ public class UserService {
 	}
 
 	public void updateUser(UserDto dto) {
-		Optional<UserDao> userEntity = repository.findById(dto.getId());
+		Optional<User> userEntity = repository.findById(dto.getId());
 
 		if (userEntity.isPresent()) {
-			UserDao user = new UserDao();
+			User user = new User();
 			repository.save(copyToDao(dto, user));
 		} else {
 			throw new UserNotFoundException(dto.getId());
@@ -70,7 +70,7 @@ public class UserService {
 	}
 
 	public void deleteUser(Long id) {
-		Optional<UserDao> userEntity = repository.findById(id);
+		Optional<User> userEntity = repository.findById(id);
 
 		if (userEntity.isPresent()) {
 			repository.delete(userEntity.get());

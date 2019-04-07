@@ -14,7 +14,7 @@ import java.util.List;
 @Entity
 @Table(name = "TENDER")
 @Data
-public class TenderDao {
+public class Tender {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
@@ -51,7 +51,7 @@ public class TenderDao {
 			joinColumns = {@JoinColumn(name = "user_id")},
 			inverseJoinColumns = {@JoinColumn(name = "tender_id")}
 	)
-	private List<UserDao> acceptedUsers = new ArrayList<>();
+	private List<User> acceptedUsers = new ArrayList<>();
 	private Location location;
 
 	public TenderResponseDto toDto() {

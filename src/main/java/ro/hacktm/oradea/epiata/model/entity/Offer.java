@@ -40,7 +40,7 @@ public class Offer {
 
 	@ManyToOne()
 	@JoinColumn(name = "user_id")
-	private UserDao user;
+	private User user;
 	private Boolean active = true;
 
 	public OfferDto toDto() {

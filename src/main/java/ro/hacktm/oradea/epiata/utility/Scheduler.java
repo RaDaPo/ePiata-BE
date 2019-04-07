@@ -6,7 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import ro.hacktm.oradea.epiata.model.entity.Offer;
-import ro.hacktm.oradea.epiata.model.entity.TenderDao;
+import ro.hacktm.oradea.epiata.model.entity.Tender;
 import ro.hacktm.oradea.epiata.repository.OfferRepository;
 import ro.hacktm.oradea.epiata.repository.TenderRepository;
 
@@ -46,7 +46,7 @@ public class Scheduler {
 		}
 	}
 
-	private void validateTenderDates(TenderDao offerDao) {
+	private void validateTenderDates(Tender offerDao) {
 		if (offerDao.getEndDate().compareTo(new Date()) < 0) {
 			offerDao.setActive(false);
 			tenderRepository.save(offerDao);

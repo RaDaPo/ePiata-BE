@@ -19,7 +19,7 @@ public class Category {
 
 	@OneToOne(mappedBy = "owner", cascade = CascadeType.ALL)
 	@JsonBackReference
-	private TenderDao tenderDao;
+	private Tender tenderDao;
 
 	public CategoryDto toDto() {
 		CategoryDto dto = new CategoryDto();

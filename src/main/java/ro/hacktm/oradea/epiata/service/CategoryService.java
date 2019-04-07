@@ -47,7 +47,7 @@ public class CategoryService {
 
 	CategoryDto getCategoryByName(String name) {
 
-		Optional<Category> category = categoryRepository.findByName(name);
+		Optional<Category> category = categoryRepository.findFirstByName(name);
 
 		if (category.isPresent())
 			return category.get().toDto();

@@ -21,6 +21,6 @@ public class TenderOwner {
 
 	@OneToOne(mappedBy = "owner", cascade = CascadeType.ALL)
 	@JsonBackReference
-	private TenderDao tenderDao;
+	private Tender tender;
 
 }
