@@ -15,5 +15,7 @@ public class Location {
 	String latitude;
 	String longitude;
 	String zip;
+	String timeToDestination;
+	String distance;
 
 }
