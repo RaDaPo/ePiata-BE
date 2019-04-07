@@ -89,15 +89,15 @@ public class ExternalServices {
 
     private HttpEntity getHttpEntity() {
         HttpHeaders headers = new HttpHeaders();
-        headers.add("Accept", MediaType.TEXT_HTML_VALUE);
+        headers.add("Accept", MediaType.APPLICATION_JSON_VALUE);
         return new HttpEntity<>(headers);
     }
 
     private Map<String, String> getAddressInParams(String address) {
         Map<String, String> params = new HashMap<>();
         params.put("searchtext", address);
-        params.put("api_id", "knnbN1GnjwVdTh62SSdB");
-        params.put("api_code", "Fcs2O5Pm7OPu_OSZEQFHGA");
+        params.put("api_id", "IF38vrhY5qEPuOJ1UMgO");
+        params.put("api_code", "-CyIZurQnSpO03Z7qLOzsw");
         return params;
     }
 
@@ -105,8 +105,8 @@ public class ExternalServices {
         Map<String, String> params = new HashMap<>();
         params.put("start_location", formatAddress(startAddress));
         params.put("end_location", formatAddress(endAddress));
-        params.put("api_id", "N4TSXjkJWFFALhOoyBqD");
-        params.put("api_code", "FEZ6BXxgJp7ukNHbspkgCA");
+        params.put("api_id", "IF38vrhY5qEPuOJ1UMgO");
+        params.put("api_code", "-CyIZurQnSpO03Z7qLOzsw");
         return params;
     }
 
