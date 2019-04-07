@@ -29,7 +29,7 @@ public class ExternalServices {
                     "&mode=fastest;car&app_id={api_id}"
                     + "&app_code={api_code}";
 
-    private static final String APP_ID = "IF38vrhY5qEPuOJ1UMgO";
+    private static final String APP_ID = "q2X7wXYgPbHoBRhTKK7z";
     private static final String APP_CODE = "WRlLbT3646FRu7G7Yne5UA";
 
     private RestTemplate restTemplate = new RestTemplate();
