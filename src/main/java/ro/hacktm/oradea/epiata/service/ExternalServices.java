@@ -29,6 +29,9 @@ public class ExternalServices {
                     "&mode=fastest;car&app_id={api_id}"
                     + "&app_code={api_code}";
 
+    private static final String APP_ID = "IF38vrhY5qEPuOJ1UMgO";
+    private static final String APP_CODE = "WRlLbT3646FRu7G7Yne5UA";
+
     private RestTemplate restTemplate = new RestTemplate();
 
     public DistanceDto getDistanceBetweenLocations(String address) {
@@ -96,8 +99,8 @@ public class ExternalServices {
     private Map<String, String> getAddressInParams(String address) {
         Map<String, String> params = new HashMap<>();
         params.put("searchtext", address);
-        params.put("api_id", "IF38vrhY5qEPuOJ1UMgO");
-        params.put("api_code", "-CyIZurQnSpO03Z7qLOzsw");
+        params.put("api_id", APP_ID);
+        params.put("api_code", APP_CODE);
         return params;
     }
 
@@ -105,8 +108,8 @@ public class ExternalServices {
         Map<String, String> params = new HashMap<>();
         params.put("start_location", formatAddress(startAddress));
         params.put("end_location", formatAddress(endAddress));
-        params.put("api_id", "IF38vrhY5qEPuOJ1UMgO");
-        params.put("api_code", "-CyIZurQnSpO03Z7qLOzsw");
+        params.put("api_id", APP_ID);
+        params.put("api_code", APP_CODE);
         return params;
     }
 
