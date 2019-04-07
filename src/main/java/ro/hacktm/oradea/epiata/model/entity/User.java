@@ -11,7 +11,7 @@ import java.util.List;
 @Entity
 @Table(name = "USER")
 @Data
-public class UserDao {
+public class User {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
@@ -24,7 +24,7 @@ public class UserDao {
 	private String email;
 	@ManyToMany(mappedBy = "acceptedUsers")
 	@JsonIgnore
-	private List<TenderDao> tenders;
+	private List<Tender> tenders;
 	@OneToMany(mappedBy = "user")
 	@JsonBackReference
 	private List<Offer> offers;

@@ -11,6 +11,7 @@ import ro.hacktm.oradea.epiata.model.entity.*;
 import ro.hacktm.oradea.epiata.repository.CategoryRepository;
 import ro.hacktm.oradea.epiata.repository.TenderAttendeesRepository;
 import ro.hacktm.oradea.epiata.repository.TenderRepository;
+import ro.hacktm.oradea.epiata.repository.UserRepository;
 
 import java.util.Collections;
 import java.util.List;
@@ -24,6 +25,7 @@ public class TenderService {
 
 	private final TenderRepository repository;
 	private final UserService userService;
+	private final UserRepository userRepository;
 	private final TenderAttendeesRepository tenderAttendeesRepository;
 	private final CategoryRepository categoryRepository;
 
@@ -31,14 +33,14 @@ public class TenderService {
 		return repository.findAllByActiveTrue()
 				.stream()
 				.filter(Objects::nonNull)
-				.map(TenderDao::toDto)
+				.map(Tender::toDto)
 				.collect(Collectors.toList());
 	}
 
 	public TenderResponseDto addNewTender(TenderAddRequest tenderRequestDto) {
-		TenderDao tender = new TenderDao();
+		Tender tender = new Tender();
 		BeanUtils.copyProperties(tenderRequestDto, tender);
-		Optional<UserDao> owner = userService.getUserDaoById(tenderRequestDto.getOwnerId());
+		Optional<User> owner = userRepository.findById(tenderRequestDto.getOwnerId());
 		Optional<Category> category = categoryRepository.findById(tenderRequestDto.getCategoryId());
 		if (owner.isPresent()) {
 			owner.ifPresent(userDao -> tender.setOwner(userDao.toOwnerDao()));
@@ -49,24 +51,24 @@ public class TenderService {
 		return tender.toDto();
 	}
 
-	public TenderDao addAttendeesToTender(TenderAddUsersRequestDto tenderRequestDto) {
-		Optional<TenderDao> tender = getTenderById(tenderRequestDto.getTenderId());
+	public Tender addAttendeesToTender(TenderAddUsersRequestDto tenderRequestDto) {
+		Optional<Tender> tender = getTenderById(tenderRequestDto.getTenderId());
 		if (tender.isPresent()) {
 			return processIfMassStillNeeded(tenderRequestDto, tender.get());
 		}
 		throw new TenderNotFoundException(tenderRequestDto.getTenderId());
 	}
 
-	private TenderDao processIfMassStillNeeded(TenderAddUsersRequestDto tenderRequestDto, TenderDao tender) {
+	private Tender processIfMassStillNeeded(TenderAddUsersRequestDto tenderRequestDto, Tender tender) {
 		if (getNeededGrossMassPlusMarje(tender) > tenderRequestDto.getParticipationMass()) {
-			Optional<UserDao> user = userService.getUserDaoById(tenderRequestDto.getUserId());
+			Optional<User> user = userRepository.findById(tenderRequestDto.getUserId());
 			user.ifPresent(userDao -> setAttendees(tenderRequestDto, tender, userDao));
 			return tender;
 		}
 		throw new NeededGrossMassExceeded(getNeededGrossMassPlusMarje(tender) - tender.getGatheredGrossMass());
 	}
 
-	private void setAttendees(TenderAddUsersRequestDto tenderRequestDto, TenderDao tender, UserDao user) {
+	private void setAttendees(TenderAddUsersRequestDto tenderRequestDto, Tender tender, User user) {
 		tender.setGatheredGrossMass(tender.getGatheredGrossMass() + tenderRequestDto.getParticipationMass());
 		TenderAttendee tenderAttendee = new TenderAttendee();
 		tenderAttendee.setUserId(user.getId());
@@ -76,13 +78,13 @@ public class TenderService {
 		save(tender);
 	}
 
-	private int getNeededGrossMassPlusMarje(TenderDao tender) {
+	private int getNeededGrossMassPlusMarje(Tender tender) {
 		return (tender.getNeededGrossMass() - tender.getGatheredGrossMass()) + tender.getNeededGrossMass() / 5;
 	}
 
 	public void acceptAttendeeToTender(TenderAcceptUser acceptUser) {
-		Optional<TenderDao> tender = getTenderById(acceptUser.getTenderId());
-		Optional<UserDao> user = userService.getUserDaoById(acceptUser.getUserId());
+		Optional<Tender> tender = getTenderById(acceptUser.getTenderId());
+		Optional<User> user = userRepository.findById(acceptUser.getUserId());
 		if (tender.isPresent() && user.isPresent()) {
 			if (tender.get().getAcceptedUserIds() != null) {
 				TenderAttendee tenderAttendee = tenderAttendeesRepository.findByUserId(acceptUser.getUserId());
@@ -104,7 +106,7 @@ public class TenderService {
 		}
 	}
 
-	private void processAndSaveAttendee(TenderDao tender, UserDao user, TenderAttendee tenderAttendee, AcceptedUser acceptedUser) {
+	private void processAndSaveAttendee(Tender tender, User user, TenderAttendee tenderAttendee, AcceptedUser acceptedUser) {
 		tenderAttendee.setAccepted(true);
 		tenderAttendeesRepository.save(tenderAttendee);
 		tender.setGatheredGrossMass(tender.getGatheredGrossMass() + tenderAttendee.getParticipationMass());
@@ -118,35 +120,35 @@ public class TenderService {
 	}
 
 	public void declineAttendeeFromTender(TenderAcceptUser acceptUser) {
-		Optional<TenderDao> tender = getTenderById(acceptUser.getTenderId());
+		Optional<Tender> tender = getTenderById(acceptUser.getTenderId());
 		if (tender.isPresent() && tender.get().getAcceptedUserIds().stream().noneMatch(x -> x.getUserId().equals(acceptUser.getUserId()))) {
 			TenderAttendee tenderAttendee = tenderAttendeesRepository.findByUserId(acceptUser.getUserId());
 			tenderAttendee.setAccepted(false);
 			tenderAttendee.setRejected(true);
-			Optional<UserDao> userDao = userService.getUserDaoById(acceptUser.getUserId());
+			Optional<User> userDao = userRepository.findById(acceptUser.getUserId());
 			userDao.ifPresent(dao -> tender.get().getAcceptedUsers().remove(dao));
 			save(tender.get());
 		}
 	}
 
-	private void save(TenderDao tender) {
+	private void save(Tender tender) {
 		repository.save(tender);
 	}
 
-	private Optional<TenderDao> getTenderById(Long id) {
+	private Optional<Tender> getTenderById(Long id) {
 		return repository.findById(id);
 	}
 
-	public List<TenderDao> findByDescriptionContaining(String searchPhrase) {
+	public List<Tender> findByDescriptionContaining(String searchPhrase) {
 		return repository.findByDescriptionOrTitleContainingAndActiveTrue(searchPhrase, searchPhrase);
 	}
 
-	public List<TenderDao> findByCategoryTypeAndCounty(TenderFilteredRequestDto requestDto) {
+	public List<Tender> findByCategoryTypeAndCounty(TenderFilteredRequestDto requestDto) {
 		return repository.findByCategory_TypeOrLocation_CountyAndActiveTrue(requestDto.getCategoryType(), requestDto.getCounty());
 	}
 
 	public void findTenderByIdAndCloseIt(TenderCloseRequestDto requestDto) {
-		Optional<TenderDao> tender = repository.findById(requestDto.getTenderId());
+		Optional<Tender> tender = repository.findById(requestDto.getTenderId());
 		if (tender.isPresent()) {
 			tender.get().setActive(false);
 			repository.save(tender.get());
@@ -154,12 +156,12 @@ public class TenderService {
 	}
 
 	public void deleteTender(TenderCloseRequestDto requestDto) {
-		Optional<TenderDao> tender = repository.findById(requestDto.getTenderId());
+		Optional<Tender> tender = repository.findById(requestDto.getTenderId());
 		tender.ifPresent(repository::delete);
 	}
 
 	public void findTenderAndReactivateId(TenderCloseRequestDto requestDto) {
-		Optional<TenderDao> tender = repository.findById(requestDto.getTenderId());
+		Optional<Tender> tender = repository.findById(requestDto.getTenderId());
 		if (tender.isPresent()) {
 			tender.get().setActive(true);
 			tender.get().setNeededGrossMass(requestDto.getNewNeededGrossMass());

@@ -3,13 +3,18 @@ package ro.hacktm.oradea.epiata.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.jpa.domain.Specification;
+import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
 import ro.hacktm.oradea.epiata.exception.OfferNotFoundException;
+import ro.hacktm.oradea.epiata.model.dto.CategoryDto;
 import ro.hacktm.oradea.epiata.model.dto.FilteredOffersRequest;
 import ro.hacktm.oradea.epiata.model.dto.OfferDto;
 import ro.hacktm.oradea.epiata.model.entity.Offer;
 import ro.hacktm.oradea.epiata.repository.OfferRepository;
 
+import javax.persistence.criteria.*;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -40,18 +45,38 @@ public class OfferService {
 	}
 
 	private List<Offer> getFilteredOffers(FilteredOffersRequest request) {
+
+
 		Long categoryId = null;
 		String name = request.getSearchTerm();
 		String county = null;
 
 		if (request.getCategory() != null)
-			categoryId = categoryService.getCategoryByName(request.getCategory()).getId();
+			categoryId = request.getCategory();
 
 		if (request.getLocation() != null)
 			county = request.getLocation().getCounty();
 
-		return repository
-				.findByCategoryOrNameOrLocation_County(categoryId, name, county);
+		return repository.findAll(new Specification<Offer>() {
+			@Nullable
+			@Override
+			public Predicate toPredicate(Root<Offer> root, CriteriaQuery<?> criteriaQuery, CriteriaBuilder criteriaBuilder) {
+				List<Predicate> predicates = new ArrayList<>();
+				Path<Object> offer = root.get("offer");
+
+				if (request.getSearchTerm() != null)
+					predicates.add(criteriaBuilder.equal(offer.get("name"), request.getSearchTerm()));
+
+				if (request.getCategory() != null)
+					predicates.add(criteriaBuilder.equal(offer.get("category").get("name"), request.getCategory()));
+
+				if (request.getLocation() != null) {
+					predicates.add(criteriaBuilder.equal(offer.get("location").get("county"), request.getLocation().getCounty()));
+				}
+
+				return criteriaBuilder.and(predicates.toArray(new Predicate[0]));
+			}
+		});
 	}
 
 	public OfferDto getOffer(Long id) {
@@ -77,6 +102,9 @@ public class OfferService {
 	public void createOffer(OfferDto dto) {
 		Offer dao = new Offer();
 		BeanUtils.copyProperties(dto, dao);
+
+		CategoryDto category = categoryService.getCategoriesById(dto.getCategory());
+		dao.setCategory(category.getId());
 		repository.save(dao);
 	}
 
