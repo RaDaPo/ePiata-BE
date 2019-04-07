@@ -39,7 +39,7 @@ public class TenderService {
 		TenderDao tender = new TenderDao();
 		BeanUtils.copyProperties(tenderRequestDto, tender);
 		Optional<UserDao> owner = userService.getUserDaoById(tenderRequestDto.getOwnerId());
-		Optional<Category> category = categoryRepository.findByName(tenderRequestDto.getCategoryName());
+		Optional<Category> category = categoryRepository.findById(tenderRequestDto.getCategoryId());
 		if (owner.isPresent()) {
 			owner.ifPresent(userDao -> tender.setOwner(userDao.toOwnerDao()));
 			tender.setLocation(owner.get().getLocation());
@@ -162,6 +162,7 @@ public class TenderService {
 		Optional<TenderDao> tender = repository.findById(requestDto.getTenderId());
 		if (tender.isPresent()) {
 			tender.get().setActive(true);
+			tender.get().setNeededGrossMass(requestDto.getNewNeededGrossMass());
 			repository.save(tender.get());
 		}
 	}

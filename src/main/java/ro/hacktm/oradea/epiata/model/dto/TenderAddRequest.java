@@ -2,10 +2,7 @@ package ro.hacktm.oradea.epiata.model.dto;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
-import ro.hacktm.oradea.epiata.model.entity.CategoryType;
 
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import java.util.Date;
@@ -19,10 +16,8 @@ public class TenderAddRequest {
 	private Double pricePerUnit;
 	private String distance;
 	private Long ownerId;
-	private String categoryName;
+	private Long categoryId;
 	private Integer neededGrossMass;
-//	@Enumerated(EnumType.STRING)
-//	private CategoryType type;
 	@Temporal(TemporalType.DATE)
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
 	private Date startDate;
