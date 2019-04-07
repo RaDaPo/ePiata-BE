@@ -10,6 +10,8 @@ import java.util.List;
 @Repository
 public interface OfferRepository extends PagingAndSortingRepository<Offer, Long> {
 	List<Offer> findAll();
+
 	List<Offer> findAll(Specification specification);
+
 	List<Offer> findByCategoryAndNameAndLocation_County(Long category, String name, String county);
 }

@@ -12,6 +12,9 @@ public interface TenderApi {
 	@GetMapping
 	ResponseEntity getAllUsers();
 
+	@GetMapping(value = "/active")
+	ResponseEntity getAllActiveTenders();
+
 	@PostMapping
 	ResponseEntity addTender(@RequestBody TenderAddRequest tenderRequestDto);
 

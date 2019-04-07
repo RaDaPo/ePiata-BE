@@ -11,7 +11,6 @@ class TenderRequestDto {
 	private String unit;
 	private Double pricePerUnit;
 	private Long ownerId;
-	private boolean status;
 	private Integer neededGrossMass;
 	private Long userId;
 	private List<UserDto> users;

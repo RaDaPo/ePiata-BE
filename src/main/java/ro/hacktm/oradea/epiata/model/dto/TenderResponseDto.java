@@ -23,8 +23,8 @@ public class TenderResponseDto {
 	private String distance;
 	private String ownerName;
 	private Integer neededGrossMass = 0;
-	private Integer gatheredGrossMass = 0;
-	private boolean status;
+	private Integer gatheredAcceptedGrossMass = 0;
+	private Integer offeredGrossMass = 0;
 	@JsonInclude(JsonInclude.Include.NON_NULL)
 	private List<String> users;
 	private List<TenderAttendee> allTenderAttendees;
