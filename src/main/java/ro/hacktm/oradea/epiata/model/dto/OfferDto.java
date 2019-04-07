@@ -22,6 +22,7 @@ public class OfferDto {
 	private String description;
 	private Boolean active;
 	private Long category;
+	private String image;
 	@Temporal(TemporalType.DATE)
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
 	private Date startDate;

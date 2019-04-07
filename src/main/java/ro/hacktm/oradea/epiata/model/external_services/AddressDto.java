@@ -6,6 +6,6 @@ import lombok.Data;
 @Data
 public class AddressDto {
 
-    @JsonProperty("display_name")
-    private String address;
+	@JsonProperty("display_name")
+	private String address;
 }
