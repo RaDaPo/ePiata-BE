@@ -69,7 +69,7 @@ public class OfferService {
 					predicates.add(criteriaBuilder.like(criteriaBuilder.lower(root.get("name")), "%" + request.getSearchTerm().toLowerCase() + "%"));
 
 				if (request.getCategory() != null)
-					predicates.add(criteriaBuilder.equal(root.get("category").get("name"), request.getCategory()));
+					predicates.add(criteriaBuilder.equal(root.get("category"), request.getCategory()));
 
 				if (request.getLocation() != null) {
 					predicates.add(criteriaBuilder.equal(root.get("location").get("county"), request.getLocation().getCounty()));

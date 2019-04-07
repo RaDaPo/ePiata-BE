@@ -46,16 +46,19 @@ public class TenderController implements TenderApi {
 		return getResponseEntityOk(tenderService.findByCategoryTypeAndCounty(requestDto));
 	}
 
-	public void closetTender(TenderCloseRequestDto requestDto) {
+	public ResponseEntity closetTender(TenderCloseRequestDto requestDto) {
 		tenderService.findTenderByIdAndCloseIt(requestDto);
+		return getResponseEntityOk();
 	}
 
-	public void deleteTender(TenderCloseRequestDto requestDto) {
+	public ResponseEntity deleteTender(TenderCloseRequestDto requestDto) {
 		tenderService.deleteTender(requestDto);
+		return getResponseEntityOk();
 	}
 
-	public void reactivateClosedTender(TenderCloseRequestDto requestDto) {
+	public ResponseEntity reactivateClosedTender(TenderCloseRequestDto requestDto) {
 		tenderService.findTenderAndReactivateId(requestDto);
+		return getResponseEntityOk();
 	}
 
 }

@@ -21,7 +21,9 @@ public class Offer {
 	private String quantity;
 	private String price;
 
+	@Lob
 	private String image;
+	private String unit;
 
 	private Long category;
 
@@ -57,6 +59,8 @@ public class Offer {
 		dto.setId(this.getId());
 		dto.setCategory(this.getCategory());
 		dto.setLocation(this.getLocation());
+		dto.setUnit(this.getUnit());
+		dto.setImage(this.getImage());
 		dto.setActive(this.getActive());
 		return dto;
 	}

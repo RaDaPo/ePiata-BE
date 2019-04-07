@@ -34,13 +34,13 @@ public interface TenderApi {
 
 	@PostMapping(value = "/close")
 	@ResponseStatus(value = HttpStatus.NO_CONTENT)
-	void closetTender(TenderCloseRequestDto requestDto);
+	ResponseEntity closetTender(TenderCloseRequestDto requestDto);
 
 	@PostMapping(value = "/reactivate")
 	@ResponseStatus(value = HttpStatus.NO_CONTENT)
-	void reactivateClosedTender(TenderCloseRequestDto requestDto);
+	ResponseEntity reactivateClosedTender(TenderCloseRequestDto requestDto);
 
 	@PostMapping(value = "/delete")
 	@ResponseStatus(value = HttpStatus.NO_CONTENT)
-	void deleteTender(TenderCloseRequestDto requestDto);
+	ResponseEntity deleteTender(TenderCloseRequestDto requestDto);
 }
