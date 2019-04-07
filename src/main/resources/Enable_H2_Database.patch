@@ -1,0 +1,38 @@
+Index: pom.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- pom.xml	(revision 6cf2410fd5631263c6543c9efaea69f6d6ec5f30)
++++ pom.xml	(date 1554631732000)
+@@ -47,6 +47,11 @@
+ 			<version>2.9.2</version>
+ 		</dependency>
+
++		<dependency>
++			<groupId>com.h2database</groupId>
++			<artifactId>h2</artifactId>
++		</dependency>
++
+ 		<dependency>
+ 			<groupId>mysql</groupId>
+ 			<artifactId>mysql-connector-java</artifactId>
+Index: src/main/resources/application.properties
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- src/main/resources/application.properties	(revision 6cf2410fd5631263c6543c9efaea69f6d6ec5f30)
++++ src/main/resources/application.properties	(date 1554631732000)
+@@ -1,7 +1,7 @@
+-spring.jpa.hibernate.ddl-auto=create-drop
+-spring.datasource.url=jdbc:mysql://localhost:3306/db_example?serverTimezone=UTC&useSSL=false
+-spring.datasource.username=springuser
+-spring.datasource.password=ThePassword
++#spring.jpa.hibernate.ddl-auto=create
++#spring.datasource.url=jdbc:mysql://localhost:3306/db_example?serverTimezone=UTC&useSSL=false
++#spring.datasource.username=springuser
++#spring.datasource.password=ThePassword
+ spring.jpa.properties.hibernate.dialect=org.hibernate.dialect.MySQL5Dialect
+ spring.jpa.show-sql=true
+ spring.datasource.initialization-mode=always
